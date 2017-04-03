@@ -120,14 +120,6 @@ class NavigationHeader extends React.PureComponent<DefaultProps, Props, any> {
     viewProps: PropTypes.shape(View.propTypes),
   };
 
-  shouldComponentUpdate(nextProps: Props, nextState: any): boolean {
-    return ReactComponentWithPureRenderMixin.shouldComponentUpdate.call(
-      this,
-      nextProps,
-      nextState
-    );
-  }
-
   _tvEventHandler: TVEventHandler;
 
   componentDidMount(): void {
