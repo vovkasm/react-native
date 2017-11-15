@@ -477,8 +477,8 @@ jobs:
       - checkout
       - run: *install-node-dependencies      
       - run:
-        name: Publish React Native Package
-        command: |
+          name: Publish React Native Package
+          command: |
             if [ -n "$CIRCLE_PULL_REQUEST" ]; then
               echo "//registry.npmjs.org/:_authToken=${CIRCLE_NPM_TOKEN}" > ~/.npmrc
               git config --global user.email "reactjs-bot@users.noreply.github.com"
