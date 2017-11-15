@@ -99,6 +99,11 @@ aliases:
         - /.*-stable/
         - master
 
+  - &filter-only-stable
+    branches:
+      only:
+        - /.*-stable/
+
   - &filter-ignore-gh-pages
     branches:
       ignore: gh-pages
@@ -479,14 +484,14 @@ jobs:
       - run:
           name: Publish React Native Package
           command: |
-            if [ -n "$CIRCLE_PULL_REQUEST" ]; then
+            if [ -z "$CIRCLE_PULL_REQUEST" ]; then
               echo "//registry.npmjs.org/:_authToken=${CIRCLE_NPM_TOKEN}" > ~/.npmrc
               git config --global user.email "reactjs-bot@users.noreply.github.com"
               git config --global user.name "Website Deployment Script"
               echo "machine github.com login reactjs-bot password $GITHUB_TOKEN" > ~/.netrc
               node ./scripts/publish-npm.js
             else
-              echo "Skipping publication."            
+              echo "Skipping deploy."            
             fi
 
 # Workflows enables us to run multiple jobs in parallel
@@ -546,4 +551,4 @@ workflows:
       - publish-npm:
           requires: 
             - hold
-          filters: *filter-only-master-stable
+          filters: *filter-only-stable
