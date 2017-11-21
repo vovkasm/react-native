@@ -153,7 +153,7 @@ aliases:
   - &install-build-dependencies
     |
       sudo apt-get update -y
-      sudo apt-get install ant autoconf automake g++ gcc libqt5widgets5 lib32z1 lib32stdc++6  make maven python-dev python3-dev qml-module-qtquick-controls qtdeclarative5-dev -y
+      sudo apt-get install ant autoconf automake g++ gcc libqt5widgets5 lib32z1 lib32stdc++6  make maven python-dev python3-dev qml-module-qtquick-controls qtdeclarative5-dev file -y
 
   - &install-android-app-dependencies
     |
