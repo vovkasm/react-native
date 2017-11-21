@@ -174,7 +174,7 @@ android_defaults: &android_defaults
   environment:
     - TERM: "dumb"
     - ADB_INSTALL_TIMEOUT: 10
-    - GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx2048m -XX:+HeapDumpOnOutOfMemoryError"'
+    - GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx512m -XX:+HeapDumpOnOutOfMemoryError"'
     - ANDROID_NDK: '/opt/ndk/android-ndk-r10e'
     - BUILD_THREADS: 2
 
@@ -320,7 +320,7 @@ jobs:
             fi
 
   # Publishes new version onto npm
-  publish-npm:
+  build:
     <<: *android_defaults
     steps:
       - checkout
@@ -554,12 +554,3 @@ workflows:
     jobs:
       - analyze-pull-request:
           filters: *filter-ignore-master-stable
-
-  deploy:
-    jobs:
-      - hold:
-          type: approval
-      - publish-npm:
-          requires: 
-            - hold
-          filters: *filter-only-stable
