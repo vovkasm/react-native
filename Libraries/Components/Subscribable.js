@@ -25,15 +25,13 @@ var Subscribable = {};
 
 Subscribable.Mixin = {
 
-  componentDidMount: function() {
-    this._subscribableSubscriptions = [];
-  },
-
   componentWillUnmount: function() {
-    this._subscribableSubscriptions && this._subscribableSubscriptions.forEach(
-      (subscription) => subscription.remove()
-    );
-    this._subscribableSubscriptions = null;
+    if (this._subscribableSubscriptions) {
+      this._subscribableSubscriptions.forEach(
+        (subscription) => subscription.remove()
+      );
+      this._subscribableSubscriptions = undefined;  
+    }
   },
 
   /**
@@ -55,6 +53,7 @@ Subscribable.Mixin = {
     listener: Function,
     context: Object
   ) {
+    if (!this._subscribableSubscriptions) this._subscribableSubscriptions = [];
     this._subscribableSubscriptions.push(
       eventEmitter.addListener(eventType, listener, context)
     );
