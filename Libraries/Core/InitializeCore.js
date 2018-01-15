@@ -189,7 +189,7 @@ if (__DEV__) {
 
     // not when debugging in chrome
     // TODO(t12832058) This check is broken
-    if (!window.document) {
+    if (!window.document && global.__RCTDevToolsEnabled) {
       require('setupDevtools');
     }
 
