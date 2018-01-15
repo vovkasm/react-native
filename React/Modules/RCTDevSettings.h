@@ -67,6 +67,11 @@
 @property (nonatomic, assign, setter=setHotLoadingEnabled:) BOOL isHotLoadingEnabled;
 
 /**
+ * Whether DevTools enabled.
+ */
+@property (nonatomic, assign, setter=setDevToolsEnabled:) BOOL isDevToolsEnabled;
+
+/**
  * Toggle the element inspector.
  */
 - (void)toggleElementInspector;
