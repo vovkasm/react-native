@@ -55,9 +55,9 @@ RCTLogFunction RCTDefaultLogFunction = ^(
   NSString *message
 )
 {
-  NSString *log = RCTFormatLog([NSDate date], level, fileName, lineNumber, message);
-  fprintf(stderr, "%s\n", log.UTF8String);
-  fflush(stderr);
+//  NSString *log = RCTFormatLog([NSDate date], level, fileName, lineNumber, message);
+//  fprintf(stderr, "%s\n", log.UTF8String);
+//  fflush(stderr);
 
   int aslLevel;
   switch(level) {
