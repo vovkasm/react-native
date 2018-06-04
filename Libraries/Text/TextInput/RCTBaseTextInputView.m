@@ -15,8 +15,6 @@
 #import <React/RCTUtils.h>
 #import <React/UIView+React.h>
 
-#import "RCTInputAccessoryView.h"
-#import "RCTInputAccessoryViewContent.h"
 #import "RCTTextAttributes.h"
 #import "RCTTextSelection.h"
 
@@ -402,33 +400,12 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
 
 - (void)didSetProps:(NSArray<NSString *> *)changedProps
 {
-  #if !TARGET_OS_TV
-  if ([changedProps containsObject:@"inputAccessoryViewID"] && self.inputAccessoryViewID) {
-    [self setCustomInputAccessoryViewWithNativeID:self.inputAccessoryViewID];
-  } else if (!self.inputAccessoryViewID) {
-    [self setDefaultInputAccessoryView];
-  }
-  #endif
+  [self invalidateInputAccessoryView];
 }
 
-- (void)setCustomInputAccessoryViewWithNativeID:(NSString *)nativeID
+- (void)invalidateInputAccessoryView
 {
-  __weak RCTBaseTextInputView *weakSelf = self;
-  [_bridge.uiManager rootViewForReactTag:self.reactTag withCompletion:^(UIView *rootView) {
-    RCTBaseTextInputView *strongSelf = weakSelf;
-    if (rootView) {
-      UIView *accessoryView = [strongSelf->_bridge.uiManager viewForNativeID:nativeID
-                                                                 withRootTag:rootView.reactTag];
-      if (accessoryView && [accessoryView isKindOfClass:[RCTInputAccessoryView class]]) {
-        strongSelf.backedTextInputView.inputAccessoryView = ((RCTInputAccessoryView *)accessoryView).content.inputAccessoryView;
-        [strongSelf reloadInputViewsIfNecessary];
-      }
-    }
-  }];
-}
-
-- (void)setDefaultInputAccessoryView
-{
+#if !TARGET_OS_TV
   UIView<RCTBackedTextInputViewProtocol> *textInputView = self.backedTextInputView;
   UIKeyboardType keyboardType = textInputView.keyboardType;
 
@@ -466,15 +443,12 @@ RCT_NOT_IMPLEMENTED(- (instancetype)initWithFrame:(CGRect)frame)
   else {
     textInputView.inputAccessoryView = nil;
   }
-  [self reloadInputViewsIfNecessary];
-}
 
-- (void)reloadInputViewsIfNecessary
-{
   // We have to call `reloadInputViews` for focused text inputs to update an accessory view.
-  if (self.backedTextInputView.isFirstResponder) {
-    [self.backedTextInputView reloadInputViews];
+  if (textInputView.isFirstResponder) {
+    [textInputView reloadInputViews];
   }
+#endif
 }
 
 - (void)handleInputAccessoryDoneButton
