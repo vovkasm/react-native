@@ -7,9 +7,10 @@
 
 #import <Foundation/Foundation.h>
 
-#import <RCTAnimation/RCTValueAnimatedNode.h>
 #import <React/RCTBridgeModule.h>
 #import <React/RCTUIManager.h>
+
+@protocol RCTValueAnimatedNodeObserver;
 
 @interface RCTNativeAnimatedNodesManager : NSObject
 
