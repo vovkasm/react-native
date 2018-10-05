@@ -116,10 +116,7 @@ public class ReactViewGroup extends ViewGroup implements
 
   public ReactViewGroup(Context context) {
     super(context);
-    // TODO: Remove this check after a couple public releases.
-    if (!ViewProps.sDefaultOverflowHidden) {
-      setClipChildren(false);
-    }
+    setClipChildren(false);
     mDrawingOrderHelper = new ViewGroupDrawingOrderHelper(this);
   }
 
@@ -242,8 +239,7 @@ public class ReactViewGroup extends ViewGroup implements
     ReactViewBackgroundDrawable backgroundDrawable = getOrCreateReactViewBackground();
     backgroundDrawable.setRadius(borderRadius);
 
-    if (Build.VERSION_CODES.HONEYCOMB < Build.VERSION.SDK_INT
-      && Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 || Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
       final int UPDATED_LAYER_TYPE =
         backgroundDrawable.hasRoundedBorders()
           ? View.LAYER_TYPE_SOFTWARE
@@ -258,9 +254,8 @@ public class ReactViewGroup extends ViewGroup implements
   public void setBorderRadius(float borderRadius, int position) {
     ReactViewBackgroundDrawable backgroundDrawable = getOrCreateReactViewBackground();
     backgroundDrawable.setRadius(borderRadius, position);
-
-    if (Build.VERSION_CODES.HONEYCOMB < Build.VERSION.SDK_INT
-        && Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+    
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2 || Build.VERSION.SDK_INT == Build.VERSION_CODES.N) {
       final int UPDATED_LAYER_TYPE =
           backgroundDrawable.hasRoundedBorders()
               ? View.LAYER_TYPE_SOFTWARE
@@ -674,6 +669,10 @@ public class ReactViewGroup extends ViewGroup implements
   public void setOverflow(String overflow) {
     mOverflow = overflow;
     invalidate();
+  }
+
+  public @Nullable String getOverflow() {
+    return mOverflow;
   }
 
   /**
