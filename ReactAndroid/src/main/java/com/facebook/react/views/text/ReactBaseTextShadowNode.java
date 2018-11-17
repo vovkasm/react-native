@@ -53,6 +53,8 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
   public static final String PROP_SHADOW_RADIUS = "textShadowRadius";
   public static final String PROP_SHADOW_COLOR = "textShadowColor";
 
+  public static final String PROP_TEXT_TRANSFORM = "textTransform";
+
   public static final int DEFAULT_TEXT_SHADOW_COLOR = 0x55000000;
 
   private static class SetSpanOperation {
@@ -168,8 +170,20 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
             new SetSpanOperation(
                 start, end, new CustomLineHeightSpan(textShadowNode.getEffectiveLineHeight())));
       }
+      if (textShadowNode.mTextTransform != TextTransform.UNSET) {
+        ops.add(
+          new SetSpanOperation(
+            start,
+            end,
+            new CustomTextTransformSpan(textShadowNode.mTextTransform)));
+      }
       ops.add(new SetSpanOperation(start, end, new ReactTagSpan(textShadowNode.getReactTag())));
     }
+  }
+
+  protected int getDefaultFontSize() {
+    return mAllowFontScaling ? (int) Math.ceil(PixelUtil.toPixelFromSP(ViewDefaults.FONT_SIZE_SP))
+      : (int) Math.ceil(PixelUtil.toPixelFromDIP(ViewDefaults.FONT_SIZE_SP));
   }
 
   protected static Spannable spannedFromShadowNode(
@@ -190,10 +204,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
     }
 
     if (textShadowNode.mFontSize == UNSET) {
-      int defaultFontSize =
-          textShadowNode.mAllowFontScaling
-              ? (int) Math.ceil(PixelUtil.toPixelFromSP(ViewDefaults.FONT_SIZE_SP))
-              : (int) Math.ceil(PixelUtil.toPixelFromDIP(ViewDefaults.FONT_SIZE_SP));
+      int defaultFontSize = textShadowNode.getDefaultFontSize();
 
       ops.add(new SetSpanOperation(0, sb.length(), new AbsoluteSizeSpan(defaultFontSize)));
     }
@@ -255,6 +266,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
   protected int mTextAlign = Gravity.NO_GRAVITY;
   protected int mTextBreakStrategy =
       (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) ? 0 : Layout.BREAK_STRATEGY_HIGH_QUALITY;
+  protected TextTransform mTextTransform = TextTransform.UNSET;
 
   protected float mTextShadowOffsetDx = 0;
   protected float mTextShadowOffsetDy = 0;
@@ -311,6 +323,7 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
     mLineHeightInput = node.mLineHeightInput;
     mTextAlign = node.mTextAlign;
     mTextBreakStrategy = node.mTextBreakStrategy;
+    mTextTransform = node.mTextTransform;
 
     mTextShadowOffsetDx = node.mTextShadowOffsetDx;
     mTextShadowOffsetDy = node.mTextShadowOffsetDy;
@@ -564,5 +577,21 @@ public abstract class ReactBaseTextShadowNode extends LayoutShadowNode {
       mTextShadowColor = textShadowColor;
       markUpdated();
     }
+  }
+
+  @ReactProp(name = PROP_TEXT_TRANSFORM)
+  public void setTextTransform(@Nullable String textTransform) {
+    if (textTransform == null || "none".equals(textTransform)) {
+      mTextTransform = TextTransform.NONE;
+    } else if ("uppercase".equals(textTransform)) {
+      mTextTransform = TextTransform.UPPERCASE;
+    } else if ("lowercase".equals(textTransform)) {
+      mTextTransform = TextTransform.LOWERCASE;
+    } else if ("capitalize".equals(textTransform)) {
+      mTextTransform = TextTransform.CAPITALIZE;
+    } else {
+      throw new JSApplicationIllegalArgumentException("Invalid textTransform: " + textTransform);
+    }
+    markUpdated();
   }
 }

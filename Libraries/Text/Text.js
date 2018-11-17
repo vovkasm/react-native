@@ -64,6 +64,12 @@ const viewConfig = {
     adjustsFontSizeToFit: true,
     minimumFontScale: true,
     textBreakStrategy: true,
+    onTextLayout: true,
+  },
+  directEventTypes: {
+    topTextLayout: {
+      registrationName: 'onTextLayout',
+    },
   },
   uiViewClassName: 'RCTText',
 };
@@ -269,6 +275,7 @@ const Text = (
 };
 // $FlowFixMe - TODO T29156721 `React.forwardRef` is not defined in Flow, yet.
 const TextToExport = React.forwardRef(Text);
+TextToExport.displayName = 'Text';
 
 // TODO: Deprecate this.
 TextToExport.propTypes = TextPropTypes;
