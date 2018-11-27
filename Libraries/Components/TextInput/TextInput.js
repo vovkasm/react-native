@@ -155,6 +155,8 @@ type IOSProps = $ReadOnly<{|
     | 'telephoneNumber'
     | 'username'
     | 'password'
+    | 'newPassword'
+    | 'oneTimeCode'
   ),
   scrollEnabled?: ?boolean,
 |}>;
@@ -778,6 +780,8 @@ const TextInput = createReactClass({
       'telephoneNumber',
       'username',
       'password',
+      'newPassword',
+      'oneTimeCode',
     ]),
   },
   getDefaultProps(): Object {
@@ -1180,7 +1184,6 @@ const TextInput = createReactClass({
   },
 
   _onBlur: function(event: Event) {
-    this.blur();
     if (this.props.onBlur) {
       this.props.onBlur(event);
     }
