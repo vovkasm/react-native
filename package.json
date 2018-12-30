@@ -198,7 +198,7 @@
     "serve-static": "^1.13.1",
     "shell-quote": "1.6.1",
     "stacktrace-parser": "^0.1.3",
-    "ws": "^1.1.0",
+    "ws": "^1.1.5",
     "xcode": "^1.0.0",
     "xmldoc": "^0.4.0",
     "yargs": "^9.0.0"
@@ -235,6 +235,12 @@
       "ios.sim.release": {
         "binaryPath": "RNTester/build/Build/Products/Release-iphonesimulator/RNTester.app/",
         "build": "xcodebuild -project RNTester/RNTester.xcodeproj -scheme RNTester -configuration Release -sdk iphonesimulator -derivedDataPath RNTester/build -quiet",
+        "type": "ios.simulator",
+        "name": "iPhone 8"
+      },
+      "ios.sim.debug": {
+        "binaryPath": "RNTester/build/Build/Products/Debug-iphonesimulator/RNTester.app/",
+        "build": "xcodebuild -project RNTester/RNTester.xcodeproj -scheme RNTester -configuration Debug -sdk iphonesimulator -derivedDataPath RNTester/build -UseModernBuildSystem=NO -quiet",
         "type": "ios.simulator",
         "name": "iPhone 8"
       }
