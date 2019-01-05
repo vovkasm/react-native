@@ -70,17 +70,8 @@ class RNTesterApp extends React.Component<Props, RNTesterNavigationState> {
         );
         const urlAction = URIActionMap(url);
         const launchAction = exampleAction || urlAction;
-        if (err || !storedString) {
-          const initialAction = launchAction || {type: 'InitialAction'};
-          this.setState(RNTesterNavigationReducer(undefined, initialAction));
-          return;
-        }
-        const storedState = JSON.parse(storedString);
-        if (launchAction) {
-          this.setState(RNTesterNavigationReducer(storedState, launchAction));
-          return;
-        }
-        this.setState(storedState);
+        const initialAction = launchAction || {type: 'InitialAction'};
+        this.setState(RNTesterNavigationReducer(undefined, initialAction));
       });
     });
 
@@ -179,7 +170,10 @@ RNTesterList.ComponentExamples.concat(RNTesterList.APIExamples).forEach(
         render() {
           return (
             <SnapshotViewIOS>
-              <RNTesterExampleContainer module={ExampleModule} />
+              <RNTesterExampleContainer
+                module={ExampleModule}
+                displayFilter={false}
+              />
             </SnapshotViewIOS>
           );
         }
