@@ -7,6 +7,9 @@
 
 package com.facebook.react.views.textinput;
 
+import static android.view.View.FOCUS_FORWARD;
+
+import android.annotation.TargetApi;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -459,7 +462,7 @@ public class ReactTextInputManager extends BaseViewManager<ReactEditText, Layout
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         view.setJustificationMode(Layout.JUSTIFICATION_MODE_INTER_WORD);
       }
-      view.setGravityHorizontal(Gravity.LEFT);
+      view.setGravityHorizontal(Gravity.START);
     } else {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         view.setJustificationMode(Layout.JUSTIFICATION_MODE_NONE);
@@ -468,9 +471,9 @@ public class ReactTextInputManager extends BaseViewManager<ReactEditText, Layout
       if (textAlign == null || "auto".equals(textAlign)) {
         view.setGravityHorizontal(Gravity.NO_GRAVITY);
       } else if ("left".equals(textAlign)) {
-        view.setGravityHorizontal(Gravity.LEFT);
+        view.setGravityHorizontal(Gravity.START);
       } else if ("right".equals(textAlign)) {
-        view.setGravityHorizontal(Gravity.RIGHT);
+        view.setGravityHorizontal(Gravity.END);
       } else if ("center".equals(textAlign)) {
         view.setGravityHorizontal(Gravity.CENTER_HORIZONTAL);
       } else {
@@ -881,6 +884,12 @@ public class ReactTextInputManager extends BaseViewManager<ReactEditText, Layout
 
               // Prevent default behavior except when we want it to insert a newline.
               return blurOnSubmit || !isMultiline;
+            } else if (actionId == EditorInfo.IME_ACTION_NEXT) {
+              View v1 = v.focusSearch(FOCUS_FORWARD);
+              if (v1 != null && !v.requestFocus(FOCUS_FORWARD)) {
+                return true;
+              }
+              return false;
             }
 
             return true;

@@ -885,16 +885,17 @@ class VirtualizedList extends React.PureComponent<Props, State> {
         <ListEmptyComponent />
       )): any);
       cells.push(
-        React.cloneElement(element, {
-          key: '$empty',
-          onLayout: event => {
-            this._onLayoutEmpty(event);
-            if (element.props.onLayout) {
-              element.props.onLayout(event);
-            }
-          },
-          style: [element.props.style, inversionStyle],
-        }),
+        <View key="$empty" style={inversionStyle}>
+          {React.cloneElement(element, {
+            onLayout: event => {
+              this._onLayoutEmpty(event);
+              if (element.props.onLayout) {
+                element.props.onLayout(event);
+              }
+            },
+            style: element.props.style,
+          })}
+        </View>,
       );
     }
     if (ListFooterComponent) {
@@ -937,7 +938,7 @@ class VirtualizedList extends React.PureComponent<Props, State> {
           : this.props.inverted,
       stickyHeaderIndices,
     };
-    if (inversionStyle && itemCount !== 0) {
+    if (inversionStyle) {
       /* $FlowFixMe(>=0.70.0 site=react_native_fb) This comment suppresses an
        * error found when Flow v0.70 was deployed. To see the error delete
        * this comment and run Flow. */
@@ -1181,7 +1182,8 @@ class VirtualizedList extends React.PureComponent<Props, State> {
 
   _renderDebugOverlay() {
     const normalize =
-      this._scrollMetrics.visibleLength / this._scrollMetrics.contentLength;
+      this._scrollMetrics.visibleLength /
+      (this._scrollMetrics.contentLength || 1);
     const framesInLayout = [];
     const itemCount = this.props.getItemCount(this.props.data);
     for (let ii = 0; ii < itemCount; ii++) {
