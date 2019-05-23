@@ -145,10 +145,6 @@ const APIExamples: Array<RNTesterExample> = [
     module: require('./BorderExample'),
   },
   {
-    key: 'CameraRollExample',
-    module: require('./CameraRollExample'),
-  },
-  {
     key: 'ClipboardExample',
     module: require('./ClipboardExample'),
   },
@@ -163,10 +159,6 @@ const APIExamples: Array<RNTesterExample> = [
   {
     key: 'Dimensions',
     module: require('./DimensionsExample'),
-  },
-  {
-    key: 'ImageEditingExample',
-    module: require('./ImageEditingExample'),
   },
   {
     key: 'LayoutEventsExample',
