@@ -10,19 +10,19 @@
 
 'use strict';
 
-const AssetRegistry = require('../AssetRegistry');
-const Platform = require('../../Utilities/Platform');
-const NativeModules = require('../../BatchedBridge/NativeModules');
-const resolveAssetSource = require('../resolveAssetSource');
-
-function expectResolvesAsset(input, expectedSource) {
-  const assetId = AssetRegistry.registerAsset(input);
-  expect(resolveAssetSource(assetId)).toEqual(expectedSource);
-}
-
 describe('resolveAssetSource', () => {
+  let AssetRegistry;
+  let resolveAssetSource;
+  let NativeModules;
+  let Platform;
+
   beforeEach(() => {
     jest.resetModules();
+
+    AssetRegistry = require('../AssetRegistry');
+    resolveAssetSource = require('../resolveAssetSource');
+    NativeModules = require('../../BatchedBridge/NativeModules');
+    Platform = require('../../Utilities/Platform');
   });
 
   it('returns same source for simple static and network images', () => {
@@ -295,9 +295,16 @@ describe('resolveAssetSource', () => {
       );
     });
   });
+
+  function expectResolvesAsset(input, expectedSource) {
+    const assetId = AssetRegistry.registerAsset(input);
+    expect(resolveAssetSource(assetId)).toEqual(expectedSource);
+  }
 });
 
 describe('resolveAssetSource.pickScale', () => {
+  const resolveAssetSource = require('../resolveAssetSource');
+
   it('picks matching scale', () => {
     expect(resolveAssetSource.pickScale([1], 2)).toBe(1);
     expect(resolveAssetSource.pickScale([1, 2, 3], 2)).toBe(2);
