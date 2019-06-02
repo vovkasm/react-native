@@ -66,9 +66,9 @@
 {
   __weak RCTSRWebSocket *socket = _socket;
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-    // Only reconnect if the observer wasn't stoppped while we were waiting
-    if (socket) {
-      [self start];
+    [self start];
+    if (!socket) {
+      [self reconnect];
     }
   });
 }
