@@ -5,11 +5,13 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
 'use strict';
 
-// This is a forwarding module to allow React to require React Native internals
-// as node dependency
-module.exports = require('UIManagerStatTracker');
+const ReactFeatureFlags = {
+  debugRenderPhaseSideEffects: false,
+};
+
+module.exports = ReactFeatureFlags;
