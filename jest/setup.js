@@ -303,6 +303,13 @@ const mockNativeModules = {
     replaceExistingNonRootView: jest.fn(),
     customBubblingEventTypes: {},
     customDirectEventTypes: {},
+    AndroidDrawerLayout: {
+      Constants: {
+        DrawerPosition: {
+          Left: 10,
+        },
+      },
+    },
     AndroidTextInput: {
       Commands: {},
     },
