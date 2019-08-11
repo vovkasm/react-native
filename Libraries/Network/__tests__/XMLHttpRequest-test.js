@@ -88,6 +88,7 @@ describe('XMLHttpRequest', function() {
   });
 
   it('should expose responseType correctly', function() {
+    jest.spyOn(global.console, 'error').mockImplementation(() => {});
     expect(xhr.responseType).toBe('');
 
     // Setting responseType to an unsupported value has no effect.
@@ -103,6 +104,7 @@ describe('XMLHttpRequest', function() {
     expect(() => {
       xhr.responseType = 'text';
     }).toThrow();
+    global.console.error.mockRestore();
   });
 
   it('should expose responseText correctly', function() {

@@ -44,7 +44,7 @@ describe('VirtualizedList', () => {
   });
 
   it('warns if both renderItem or ListItemComponent are specified. Uses ListItemComponent', () => {
-    jest.spyOn(global.console, 'warn');
+    jest.spyOn(global.console, 'warn').mockImplementation(() => {});
     function ListItemComponent({item}) {
       return <item value={item.key} testID={`${item.key}-ListItemComponent`} />;
     }
@@ -70,6 +70,7 @@ describe('VirtualizedList', () => {
   });
 
   it('throws if no renderItem or ListItemComponent', () => {
+    jest.spyOn(global.console, 'error').mockImplementation(() => {});
     const componentFactory = () =>
       ReactTestRenderer.create(
         <VirtualizedList
@@ -81,6 +82,7 @@ describe('VirtualizedList', () => {
     expect(componentFactory).toThrow(
       'VirtualizedList: Either ListItemComponent or renderItem props are required but none were found.',
     );
+    console.error.mockRestore();
   });
 
   it('renders empty list', () => {
