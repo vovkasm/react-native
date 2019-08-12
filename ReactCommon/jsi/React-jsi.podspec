@@ -46,7 +46,4 @@ Pod::Spec.new do |s|
     # no-op
   end
 
-  s.subspec "Fabric" do |ss|
-    ss.pod_target_xcconfig  = { "OTHER_CFLAGS" => "$(inherited) -DRN_FABRIC_ENABLED" }
-  end
 end

@@ -31,9 +31,7 @@ Pod::Spec.new do |s|
   s.platforms              = { :ios => "9.0", :tvos => "9.2" }
   s.source                 = source
   s.source_files           = "**/*.{c,h,m,mm,S,cpp}"
-  s.exclude_files          = "DevSupport/**/*",
-                             "Fabric/**/*",
-                             "Inspector/**/*"
+  s.exclude_files          = "DevSupport/**/*", "Inspector/**/*"
   s.ios.exclude_files      = "**/RCTTV*.*"
   s.tvos.exclude_files     = "Modules/RCTClipboard*",
                              "Views/RCTDatePicker*",

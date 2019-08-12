@@ -34,7 +34,6 @@ public abstract class ReactAppInstrumentationTestCase extends
     super.setUp();
 
     Intent intent = new Intent();
-    intent.putExtra(ReactAppTestActivity.EXTRA_IS_FABRIC_TEST, isFabricTest());
     setActivityIntent(intent);
     final ReactAppTestActivity activity = getActivity();
     activity.loadApp(
@@ -131,10 +130,6 @@ public abstract class ReactAppInstrumentationTestCase extends
   protected abstract String getReactApplicationKeyUnderTest();
 
   protected boolean getEnableDevSupport() {
-    return false;
-  }
-
-  protected boolean isFabricTest() {
     return false;
   }
 

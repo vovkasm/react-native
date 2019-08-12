@@ -112,7 +112,6 @@ public class NativeModuleRegistry {
     // iterating over all the modules for find this one instance, and then calling it, we
     // short-circuit
     // the search, and simply call OnBatchComplete on the UI Manager.
-    // With Fabric, UIManager would no longer be a NativeModule, so this call would simply go away
     ModuleHolder moduleHolder = mModules.get("UIManager");
     if (moduleHolder != null && moduleHolder.hasInstance()) {
       ((OnBatchCompleteListener) moduleHolder.getModule()).onBatchComplete();

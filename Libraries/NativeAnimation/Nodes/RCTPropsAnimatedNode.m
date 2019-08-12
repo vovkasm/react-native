@@ -8,7 +8,6 @@
 #import "RCTPropsAnimatedNode.h"
 
 #import <React/RCTLog.h>
-#import <React/RCTSurfacePresenterStub.h>
 #import <React/RCTUIManager.h>
 
 #import "RCTAnimationUtils.h"
@@ -24,7 +23,6 @@
   NSString *_connectedViewName;
   __weak RCTBridge *_bridge;
   NSMutableDictionary<NSString *, NSObject *> *_propsDictionary; // TODO: use RawProps or folly::dynamic directly
-  BOOL _managedByFabric;
 }
 
 - (instancetype)initWithTag:(NSNumber *)tag
@@ -36,11 +34,6 @@
   return self;
 }
 
-- (BOOL)isManagedByFabric
-{
-  return _managedByFabric;
-}
-
 - (void)connectToView:(NSNumber *)viewTag
              viewName:(NSString *)viewName
                bridge:(RCTBridge *)bridge
@@ -48,7 +41,6 @@
   _bridge = bridge;
   _connectedViewTag = viewTag;
   _connectedViewName = viewName;
-  _managedByFabric = RCTUIManagerTypeForTagIsFabric(viewTag);
   _rootTag = nil;
 }
 
@@ -57,20 +49,14 @@
   _bridge = nil;
   _connectedViewTag = nil;
   _connectedViewName = nil;
-  _managedByFabric = NO;
   _rootTag = nil;
 }
 
 - (void)updateView
 {
-  if (_managedByFabric) {
-    [_bridge.surfacePresenter synchronouslyUpdateViewOnUIThread:_connectedViewTag
-                                                          props:_propsDictionary];
-  } else {
-    [_bridge.uiManager synchronouslyUpdateViewOnUIThread:_connectedViewTag
-                                                viewName:_connectedViewName
-                                                   props:_propsDictionary];
-  }
+  [_bridge.uiManager synchronouslyUpdateViewOnUIThread:_connectedViewTag
+                                              viewName:_connectedViewName
+                                                  props:_propsDictionary];
 }
 
 - (void)restoreDefaultValues

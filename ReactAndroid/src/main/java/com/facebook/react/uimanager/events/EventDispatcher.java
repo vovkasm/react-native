@@ -1,6 +1,6 @@
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
- *
+ * <p>
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
@@ -8,6 +8,7 @@
 package com.facebook.react.uimanager.events;
 
 import android.util.LongSparseArray;
+
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -15,8 +16,8 @@ import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.modules.core.ChoreographerCompat;
 import com.facebook.react.modules.core.ReactChoreographer;
-import com.facebook.react.uimanager.common.UIManagerType;
 import com.facebook.systrace.Systrace;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -120,9 +121,9 @@ public class EventDispatcher implements LifecycleEventListener {
     synchronized (mEventsStagingLock) {
       mEventStaging.add(event);
       Systrace.startAsyncFlow(
-          Systrace.TRACE_TAG_REACT_JAVA_BRIDGE,
-          event.getEventName(),
-          event.getUniqueID());
+        Systrace.TRACE_TAG_REACT_JAVA_BRIDGE,
+        event.getEventName(),
+        event.getUniqueID());
     }
     maybePostFrameCallbackFromNonUI();
   }
@@ -213,9 +214,9 @@ public class EventDispatcher implements LifecycleEventListener {
           }
 
           long eventCookie = getEventCookie(
-              event.getViewTag(),
-              event.getEventName(),
-              event.getCoalescingKey());
+            event.getViewTag(),
+            event.getEventName(),
+            event.getCoalescingKey());
 
           Event eventToAdd = null;
           Event eventToDispose = null;
@@ -263,16 +264,8 @@ public class EventDispatcher implements LifecycleEventListener {
 
   private static long getEventCookie(int viewTag, short eventTypeId, short coalescingKey) {
     return viewTag |
-        (((long) eventTypeId) & 0xffff) << 32 |
-        (((long) coalescingKey) & 0xffff) << 48;
-  }
-
-  public void registerEventEmitter(@UIManagerType int uiManagerType, RCTEventEmitter eventEmitter) {
-    mReactEventEmitter.register(uiManagerType, eventEmitter);
-  }
-
-  public void unregisterEventEmitter(@UIManagerType int uiManagerType) {
-    mReactEventEmitter.unregister(uiManagerType);
+      (((long) eventTypeId) & 0xffff) << 32 |
+      (((long) coalescingKey) & 0xffff) << 48;
   }
 
   private class ScheduleDispatchFrameCallback extends ChoreographerCompat.FrameCallback {
@@ -296,9 +289,9 @@ public class EventDispatcher implements LifecycleEventListener {
         if (!mHasDispatchScheduled) {
           mHasDispatchScheduled = true;
           Systrace.startAsyncFlow(
-              Systrace.TRACE_TAG_REACT_JAVA_BRIDGE,
-              "ScheduleDispatchFrameCallback",
-              mHasDispatchScheduledCount.get());
+            Systrace.TRACE_TAG_REACT_JAVA_BRIDGE,
+            "ScheduleDispatchFrameCallback",
+            mHasDispatchScheduledCount.get());
           mReactContext.runOnJSQueueThread(mDispatchEventsRunnable);
         }
       } finally {
@@ -319,7 +312,7 @@ public class EventDispatcher implements LifecycleEventListener {
 
     private void post() {
       ReactChoreographer.getInstance()
-          .postFrameCallback(ReactChoreographer.CallbackType.TIMERS_EVENTS, mCurrentFrameCallback);
+        .postFrameCallback(ReactChoreographer.CallbackType.TIMERS_EVENTS, mCurrentFrameCallback);
     }
 
     public void maybePostFromNonUI() {
@@ -348,9 +341,9 @@ public class EventDispatcher implements LifecycleEventListener {
       Systrace.beginSection(Systrace.TRACE_TAG_REACT_JAVA_BRIDGE, "DispatchEventsRunnable");
       try {
         Systrace.endAsyncFlow(
-            Systrace.TRACE_TAG_REACT_JAVA_BRIDGE,
-            "ScheduleDispatchFrameCallback",
-            mHasDispatchScheduledCount.getAndIncrement());
+          Systrace.TRACE_TAG_REACT_JAVA_BRIDGE,
+          "ScheduleDispatchFrameCallback",
+          mHasDispatchScheduledCount.getAndIncrement());
         mHasDispatchScheduled = false;
         Assertions.assertNotNull(mReactEventEmitter);
         synchronized (mEventsToDispatchLock) {
@@ -367,7 +360,7 @@ public class EventDispatcher implements LifecycleEventListener {
                 continue;
               }
               Systrace.endAsyncFlow(
-                  Systrace.TRACE_TAG_REACT_JAVA_BRIDGE, event.getEventName(), event.getUniqueID());
+                Systrace.TRACE_TAG_REACT_JAVA_BRIDGE, event.getEventName(), event.getUniqueID());
               event.dispatch(mReactEventEmitter);
               event.dispose();
             }

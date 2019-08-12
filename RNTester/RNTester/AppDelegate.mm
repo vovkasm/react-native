@@ -22,11 +22,6 @@
 #import <React/RCTPushNotificationManager.h>
 #endif
 
-#ifdef RN_FABRIC_ENABLED
-#import <React/RCTSurfacePresenter.h>
-#import <React/RCTFabricSurfaceHostingProxyRootView.h>
-#endif
-
 #ifdef RN_TURBO_MODULE_ENABLED
 #import <jsireact/RCTTurboModuleManager.h>
 
@@ -37,10 +32,6 @@
 @interface AppDelegate() <RCTCxxBridgeDelegate, RCTTurboModuleManagerDelegate>{
 #else
 @interface AppDelegate() <RCTCxxBridgeDelegate>{
-#endif
-
-#ifdef RN_FABRIC_ENABLED
-  RCTSurfacePresenter *_surfacePresenter;
 #endif
 
 #ifdef RN_TURBO_MODULE_ENABLED
@@ -68,14 +59,7 @@
     initProps = @{@"exampleFromAppetizeParams": [NSString stringWithFormat:@"rntester://example/%@Example", _routeUri]};
   }
 
-#ifdef RN_FABRIC_ENABLED
-  _surfacePresenter = [[RCTSurfacePresenter alloc] initWithBridge:_bridge config:nil];
-  _bridge.surfacePresenter = _surfacePresenter;
-
-  UIView *rootView = [[RCTFabricSurfaceHostingProxyRootView alloc] initWithBridge:_bridge moduleName:@"RNTesterApp" initialProperties:initProps];
-#else
   UIView *rootView = [[RCTRootView alloc] initWithBridge:_bridge moduleName:@"RNTesterApp" initialProperties:initProps];
-#endif
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   UIViewController *rootViewController = [UIViewController new];

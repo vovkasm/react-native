@@ -48,8 +48,6 @@ import javax.annotation.Nullable;
 public class ReactAppTestActivity extends FragmentActivity
     implements DefaultHardwareBackBtnHandler, PermissionAwareActivity {
 
-  public static final String EXTRA_IS_FABRIC_TEST = "is_fabric_test";
-
   private static final String DEFAULT_BUNDLE_NAME = "AndroidTestBundle.js";
   private static final int ROOT_VIEW_ID = 8675309;
   // we need a bigger timeout for CI builds because they run on a slow emulator
@@ -78,11 +76,6 @@ public class ReactAppTestActivity extends FragmentActivity
     rootView.addView(mScreenshotingFrameLayout);
 
     mReactRootView = new ReactRootView(this);
-    Intent intent = getIntent();
-    if (intent != null && intent.getBooleanExtra(EXTRA_IS_FABRIC_TEST, false)) {
-      mReactRootView.setIsFabric(true);
-    }
-
     mScreenshotingFrameLayout.addView(mReactRootView);
   }
 
@@ -252,8 +245,7 @@ public class ReactAppTestActivity extends FragmentActivity
                               new ViewManagerRegistry(
                                 mReactInstanceManager.getOrCreateViewManagers(reactApplicationContext));
 
-                            FabricUIManagerFactory factory = spec.getFabricUIManagerFactory();
-                            return factory != null ? factory.getFabricUIManager(reactApplicationContext, viewManagerRegistry, jsContext) : null;
+                            return null;
                           }
                         };
                       }

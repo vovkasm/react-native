@@ -88,7 +88,6 @@ private:
 
 @end
 
-// TODO: Consolidate this extension with the one in RCTSurfacePresenter.
 @interface RCTBridge ()
 
 - (std::shared_ptr<facebook::react::MessageQueueThread>)jsMessageThread;

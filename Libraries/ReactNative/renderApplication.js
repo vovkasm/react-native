@@ -15,7 +15,6 @@ import GlobalPerformanceLogger from '../Utilities/GlobalPerformanceLogger';
 import type {IPerformanceLogger} from '../Utilities/createPerformanceLogger';
 import PerformanceLoggerContext from '../Utilities/PerformanceLoggerContext';
 const React = require('react');
-const ReactFabricIndicator = require('./ReactFabricIndicator');
 
 const invariant = require('invariant');
 
@@ -27,8 +26,6 @@ function renderApplication<Props: Object>(
   initialProps: Props,
   rootTag: any,
   WrapperComponent?: ?React.ComponentType<*>,
-  fabric?: boolean,
-  showFabricIndicator?: boolean,
   scopedPerformanceLogger?: IPerformanceLogger,
 ) {
   invariant(rootTag, 'Expect to have a valid rootTag, instead got ', rootTag);
@@ -38,9 +35,6 @@ function renderApplication<Props: Object>(
       value={scopedPerformanceLogger ?? GlobalPerformanceLogger}>
       <AppContainer rootTag={rootTag} WrapperComponent={WrapperComponent}>
         <RootComponent {...initialProps} rootTag={rootTag} />
-        {fabric === true && showFabricIndicator === true ? (
-          <ReactFabricIndicator />
-        ) : null}
       </AppContainer>
     </PerformanceLoggerContext.Provider>
   );
@@ -61,11 +55,7 @@ function renderApplication<Props: Object>(
   }
 
   GlobalPerformanceLogger.startTimespan('renderApplication_React_render');
-  if (fabric) {
-    require('../Renderer/shims/ReactFabric').render(renderable, rootTag);
-  } else {
-    require('../Renderer/shims/ReactNative').render(renderable, rootTag);
-  }
+  require('../Renderer/shims/ReactNative').render(renderable, rootTag);
   GlobalPerformanceLogger.stopTimespan('renderApplication_React_render');
 }
 

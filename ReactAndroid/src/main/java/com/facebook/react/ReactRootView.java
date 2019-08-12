@@ -1,15 +1,11 @@
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
- *
+ * <p>
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
 
 package com.facebook.react;
-
-import static com.facebook.react.uimanager.common.UIManagerType.DEFAULT;
-import static com.facebook.react.uimanager.common.UIManagerType.FABRIC;
-import static com.facebook.systrace.Systrace.TRACE_TAG_REACT_JAVA_BRIDGE;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -26,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+
 import com.facebook.common.logging.FLog;
 import com.facebook.infer.annotation.Assertions;
 import com.facebook.react.bridge.Arguments;
@@ -46,14 +43,16 @@ import com.facebook.react.uimanager.DisplayMetricsHolder;
 import com.facebook.react.uimanager.IllegalViewOperationException;
 import com.facebook.react.uimanager.JSTouchDispatcher;
 import com.facebook.react.uimanager.PixelUtil;
-import com.facebook.react.uimanager.RootView;
 import com.facebook.react.uimanager.ReactRoot;
+import com.facebook.react.uimanager.RootView;
 import com.facebook.react.uimanager.UIManagerHelper;
 import com.facebook.react.uimanager.UIManagerModule;
-import com.facebook.react.uimanager.common.UIManagerType;
 import com.facebook.react.uimanager.events.EventDispatcher;
 import com.facebook.systrace.Systrace;
+
 import javax.annotation.Nullable;
+
+import static com.facebook.systrace.Systrace.TRACE_TAG_REACT_JAVA_BRIDGE;
 
 /**
  * Default root view for catalyst apps. Provides the ability to listen for size changes so that a UI
@@ -79,46 +78,42 @@ public class ReactRootView extends FrameLayout implements RootView, ReactRoot {
     void onAttachedToReactInstance(ReactRootView rootView);
   }
 
-  private @Nullable ReactInstanceManager mReactInstanceManager;
-  private @Nullable String mJSModuleName;
-  private @Nullable Bundle mAppProperties;
-  private @Nullable String mInitialUITemplate;
-  private @Nullable CustomGlobalLayoutListener mCustomGlobalLayoutListener;
-  private @Nullable ReactRootViewEventListener mRootViewEventListener;
+  private @Nullable
+  ReactInstanceManager mReactInstanceManager;
+  private @Nullable
+  String mJSModuleName;
+  private @Nullable
+  Bundle mAppProperties;
+  private @Nullable
+  String mInitialUITemplate;
+  private @Nullable
+  CustomGlobalLayoutListener mCustomGlobalLayoutListener;
+  private @Nullable
+  ReactRootViewEventListener mRootViewEventListener;
   private int mRootViewTag;
   private boolean mIsAttachedToInstance;
   private boolean mShouldLogContentAppeared;
-  private @Nullable JSTouchDispatcher mJSTouchDispatcher;
+  private @Nullable
+  JSTouchDispatcher mJSTouchDispatcher;
   private final ReactAndroidHWInputDeviceHelper mAndroidHWInputDeviceHelper = new ReactAndroidHWInputDeviceHelper(this);
   private boolean mWasMeasured = false;
   private int mWidthMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
   private int mHeightMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
   private int mLastWidth = 0;
   private int mLastHeight = 0;
-  private @UIManagerType int mUIManagerType = DEFAULT;
-  private final boolean mUseSurface;
 
   public ReactRootView(Context context) {
     super(context);
-    mUseSurface = false;
-    init();
-  }
-
-  public ReactRootView(Context context, boolean useSurface) {
-    super(context);
-    mUseSurface = useSurface;
     init();
   }
 
   public ReactRootView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    mUseSurface = false;
     init();
   }
 
   public ReactRootView(Context context, AttributeSet attrs, int defStyle) {
     super(context, attrs, defStyle);
-    mUseSurface = false;
     init();
   }
 
@@ -128,11 +123,6 @@ public class ReactRootView extends FrameLayout implements RootView, ReactRoot {
 
   @Override
   protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    if (mUseSurface) {
-      super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-      return;
-    }
-
     Systrace.beginSection(TRACE_TAG_REACT_JAVA_BRIDGE, "ReactRootView.onMeasure");
     try {
       boolean measureSpecsUpdated = widthMeasureSpec != mWidthMeasureSpec ||
@@ -147,10 +137,10 @@ public class ReactRootView extends FrameLayout implements RootView, ReactRoot {
         for (int i = 0; i < getChildCount(); i++) {
           View child = getChildAt(i);
           int childSize =
-              child.getLeft()
-                  + child.getMeasuredWidth()
-                  + child.getPaddingLeft()
-                  + child.getPaddingRight();
+            child.getLeft()
+              + child.getMeasuredWidth()
+              + child.getPaddingLeft()
+              + child.getPaddingRight();
           width = Math.max(width, childSize);
         }
       } else {
@@ -161,10 +151,10 @@ public class ReactRootView extends FrameLayout implements RootView, ReactRoot {
         for (int i = 0; i < getChildCount(); i++) {
           View child = getChildAt(i);
           int childSize =
-              child.getTop()
-                  + child.getMeasuredHeight()
-                  + child.getPaddingTop()
-                  + child.getPaddingBottom();
+            child.getTop()
+              + child.getMeasuredHeight()
+              + child.getPaddingTop()
+              + child.getPaddingBottom();
           height = Math.max(height, childSize);
         }
       } else {
@@ -304,9 +294,6 @@ public class ReactRootView extends FrameLayout implements RootView, ReactRoot {
 
   @Override
   protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-    if (mUseSurface) {
-      super.onLayout(changed, left, top, right, bottom);
-    }
     // No-op since UIManagerModule handles actually laying out children.
   }
 
@@ -370,10 +357,10 @@ public class ReactRootView extends FrameLayout implements RootView, ReactRoot {
    * properties for the react component.
    */
   public void startReactApplication(
-      ReactInstanceManager reactInstanceManager,
-      String moduleName,
-      @Nullable Bundle initialProperties,
-      @Nullable String initialUITemplate) {
+    ReactInstanceManager reactInstanceManager,
+    String moduleName,
+    @Nullable Bundle initialProperties,
+    @Nullable String initialUITemplate) {
     Systrace.beginSection(TRACE_TAG_REACT_JAVA_BRIDGE, "startReactApplication");
     try {
       UiThreadUtil.assertOnUiThread();
@@ -390,10 +377,6 @@ public class ReactRootView extends FrameLayout implements RootView, ReactRoot {
       mAppProperties = initialProperties;
       mInitialUITemplate = initialUITemplate;
 
-      if (mUseSurface) {
-        // TODO initialize surface here
-      }
-
       if (!mReactInstanceManager.hasStartedCreatingInitialContext()) {
         mReactInstanceManager.createReactContextInBackground();
       }
@@ -408,14 +391,14 @@ public class ReactRootView extends FrameLayout implements RootView, ReactRoot {
   private void updateRootLayoutSpecs(final int widthMeasureSpec, final int heightMeasureSpec) {
     if (mReactInstanceManager == null) {
       FLog.w(
-          ReactConstants.TAG,
-          "Unable to update root layout specs for uninitialized ReactInstanceManager");
+        ReactConstants.TAG,
+        "Unable to update root layout specs for uninitialized ReactInstanceManager");
       return;
     }
     final ReactContext reactApplicationContext = mReactInstanceManager.getCurrentReactContext();
 
     if (reactApplicationContext != null) {
-      UIManagerHelper.getUIManager(reactApplicationContext, getUIManagerType())
+      UIManagerHelper.getUIManager(reactApplicationContext)
         .updateRootLayoutSpecs(getRootViewTag(), widthMeasureSpec, heightMeasureSpec);
     }
   }
@@ -437,7 +420,7 @@ public class ReactRootView extends FrameLayout implements RootView, ReactRoot {
 
   @Override
   public void onStage(int stage) {
-    switch(stage) {
+    switch (stage) {
       case ReactStage.ON_ATTACH_TO_INSTANCE:
         onAttachedToReactInstance();
         break;
@@ -466,12 +449,14 @@ public class ReactRootView extends FrameLayout implements RootView, ReactRoot {
   }
 
   @Override
-  public @Nullable Bundle getAppProperties() {
+  public @Nullable
+  Bundle getAppProperties() {
     return mAppProperties;
   }
 
   @Override
-  public @Nullable String getInitialUITemplate() {
+  public @Nullable
+  String getInitialUITemplate() {
     return mInitialUITemplate;
   }
 
@@ -489,48 +474,37 @@ public class ReactRootView extends FrameLayout implements RootView, ReactRoot {
    */
   @Override
   public void runApplication() {
-      Systrace.beginSection(TRACE_TAG_REACT_JAVA_BRIDGE, "ReactRootView.runApplication");
-      try {
-        if (mReactInstanceManager == null || !mIsAttachedToInstance) {
-          return;
-        }
-
-        ReactContext reactContext = mReactInstanceManager.getCurrentReactContext();
-        if (reactContext == null) {
-          return;
-        }
-
-        CatalystInstance catalystInstance = reactContext.getCatalystInstance();
-        String jsAppModuleName = getJSModuleName();
-
-        if (mUseSurface) {
-          // TODO call surface's runApplication
-        } else {
-
-          boolean isFabric = getUIManagerType() == FABRIC;
-          // Fabric requires to call updateRootLayoutSpecs before starting JS Application,
-          // this ensures the root will hace the correct pointScaleFactor.
-          if (mWasMeasured || isFabric) {
-            updateRootLayoutSpecs(mWidthMeasureSpec, mHeightMeasureSpec);
-          }
-
-          WritableNativeMap appParams = new WritableNativeMap();
-          appParams.putDouble("rootTag", getRootViewTag());
-          @Nullable Bundle appProperties = getAppProperties();
-          if (appProperties != null) {
-            appParams.putMap("initialProps", Arguments.fromBundle(appProperties));
-          }
-          if (isFabric) {
-            appParams.putBoolean("fabric", true);
-          }
-
-          mShouldLogContentAppeared = true;
-
-          catalystInstance.getJSModule(AppRegistry.class).runApplication(jsAppModuleName, appParams);
-        }
-      } finally {
-        Systrace.endSection(TRACE_TAG_REACT_JAVA_BRIDGE);
+    Systrace.beginSection(TRACE_TAG_REACT_JAVA_BRIDGE, "ReactRootView.runApplication");
+    try {
+      if (mReactInstanceManager == null || !mIsAttachedToInstance) {
+        return;
       }
+
+      ReactContext reactContext = mReactInstanceManager.getCurrentReactContext();
+      if (reactContext == null) {
+        return;
+      }
+
+      CatalystInstance catalystInstance = reactContext.getCatalystInstance();
+      String jsAppModuleName = getJSModuleName();
+
+      if (mWasMeasured) {
+        updateRootLayoutSpecs(mWidthMeasureSpec, mHeightMeasureSpec);
+      }
+
+      WritableNativeMap appParams = new WritableNativeMap();
+      appParams.putDouble("rootTag", getRootViewTag());
+      @Nullable Bundle appProperties = getAppProperties();
+      if (appProperties != null) {
+        appParams.putMap("initialProps", Arguments.fromBundle(appProperties));
+      }
+
+      mShouldLogContentAppeared = true;
+
+      catalystInstance.getJSModule(AppRegistry.class).runApplication(jsAppModuleName, appParams);
+    } finally {
+      Systrace.endSection(TRACE_TAG_REACT_JAVA_BRIDGE);
+    }
   }
 
   /**
@@ -589,20 +563,11 @@ public class ReactRootView extends FrameLayout implements RootView, ReactRoot {
   public void handleException(final Throwable t) {
     if (mReactInstanceManager == null
       || mReactInstanceManager.getCurrentReactContext() == null) {
-        throw new RuntimeException(t);
+      throw new RuntimeException(t);
     }
 
     Exception e = new IllegalViewOperationException(t.getMessage(), this, t);
     mReactInstanceManager.getCurrentReactContext().handleException(e);
-  }
-
-  public void setIsFabric(boolean isFabric) {
-    mUIManagerType = isFabric ? FABRIC : DEFAULT;
-  }
-
-  @Override
-  public @UIManagerType int getUIManagerType() {
-    return mUIManagerType;
   }
 
   @Nullable
@@ -754,9 +719,9 @@ public class ReactRootView extends FrameLayout implements RootView, ReactRoot {
 
     private void emitUpdateDimensionsEvent() {
       mReactInstanceManager
-          .getCurrentReactContext()
-          .getNativeModule(DeviceInfoModule.class)
-          .emitUpdateDimensionsEvent();
+        .getCurrentReactContext()
+        .getNativeModule(DeviceInfoModule.class)
+        .emitUpdateDimensionsEvent();
     }
 
     private WritableMap createKeyboardEventPayload(double screenY, double screenX, double width, double height) {

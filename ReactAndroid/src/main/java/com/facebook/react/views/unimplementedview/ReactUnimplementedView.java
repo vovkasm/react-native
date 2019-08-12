@@ -30,6 +30,6 @@ public class ReactUnimplementedView extends LinearLayout {
   }
 
   public void setName(String name) {
-    mTextView.setText("'" + name + "' is not Fabric compatible yet.");
+    mTextView.setText("'" + name + "' is not implemented.");
   }
 }
