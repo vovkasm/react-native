@@ -9,7 +9,6 @@ package com.facebook.react.testing;
 import android.annotation.SuppressLint;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptExecutorFactory;
-import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.uimanager.ViewManager;
 import java.util.ArrayList;
@@ -27,10 +26,8 @@ public class ReactInstanceSpecForTest {
 
   private final List<NativeModule> mNativeModules =
       new ArrayList<NativeModule>(Arrays.asList(new FakeWebSocketModule()));
-  private final List<Class<? extends JavaScriptModule>> mJSModuleSpecs = new ArrayList<>();
   private final List<ViewManager> mViewManagers = new ArrayList<>();
   private final ArrayList<ReactPackage> mReactPackages = new ArrayList<>();
-  @Nullable private FabricUIManagerFactory mFabricUIManagerFactory = null;
   @Nullable private JavaScriptExecutorFactory mJavaScriptExecutorFactory = null;
 
   public ReactInstanceSpecForTest addNativeModule(NativeModule module) {
@@ -51,16 +48,6 @@ public class ReactInstanceSpecForTest {
     }
     mReactPackages.add(reactPackage);
     return this;
-  }
-
-  public ReactInstanceSpecForTest setFabricUIManagerFactory(@Nullable FabricUIManagerFactory fabricUIManagerFactory) {
-    mFabricUIManagerFactory = fabricUIManagerFactory;
-    return this;
-  }
-
-  @Nullable
-  public FabricUIManagerFactory getFabricUIManagerFactory() {
-    return mFabricUIManagerFactory;
   }
 
   public ReactInstanceSpecForTest addPackages(List<ReactPackage> reactPackages) {

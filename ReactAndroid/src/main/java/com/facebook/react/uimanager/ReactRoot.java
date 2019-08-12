@@ -9,7 +9,7 @@ package com.facebook.react.uimanager;
 
 import android.os.Bundle;
 import android.view.ViewGroup;
-import com.facebook.react.uimanager.common.UIManagerType;
+
 import javax.annotation.Nullable;
 
 
@@ -23,11 +23,6 @@ public interface ReactRoot {
    */
   @Nullable Bundle getAppProperties();
   @Nullable String getInitialUITemplate();
-
-  /**
-   * Fabric or Default UI Manager, see {@link UIManagerType}
-   */
-  @UIManagerType int getUIManagerType();
 
   int getRootViewTag();
 

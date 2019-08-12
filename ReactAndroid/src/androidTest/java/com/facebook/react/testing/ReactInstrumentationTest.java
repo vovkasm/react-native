@@ -28,8 +28,6 @@ public abstract class ReactInstrumentationTest
 
   protected StringRecordingModule mRecordingModule;
 
-  @Nullable protected FabricUIManagerFactory mFabricUIManagerFactory = null;
-
   @Nullable protected JavaScriptExecutorFactory mJavaScriptExecutorFactory = null;
 
   public ReactInstrumentationTest() {
@@ -41,7 +39,6 @@ public abstract class ReactInstrumentationTest
     super.setUp();
 
     Intent intent = new Intent();
-    intent.putExtra(ReactAppTestActivity.EXTRA_IS_FABRIC_TEST, isFabricTest());
     setActivityIntent(intent);
     mRecordingModule = new StringRecordingModule();
     final ReactAppTestActivity activity = getActivity();
@@ -86,10 +83,6 @@ public abstract class ReactInstrumentationTest
     return false;
   }
 
-  protected boolean isFabricTest() {
-    return false;
-  }
-
   protected <T extends JavaScriptModule> T getJSModule(Class<T> jsInterface) {
     return getReactContext().getJSModule(jsInterface);
   }
@@ -100,9 +93,6 @@ public abstract class ReactInstrumentationTest
         new ReactInstanceSpecForTest().addNativeModule(mRecordingModule);
     if (mJavaScriptExecutorFactory != null) {
       reactInstanceSpecForTest.setJavaScriptExecutorFactory(mJavaScriptExecutorFactory);
-    }
-    if (mFabricUIManagerFactory != null) {
-      reactInstanceSpecForTest.setFabricUIManagerFactory(mFabricUIManagerFactory);
     }
     return reactInstanceSpecForTest;
   }

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) Facebook, Inc. and its affiliates.
- *
+ * <p>
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
@@ -9,18 +9,18 @@ package com.facebook.react.uimanager;
 
 import android.content.Context;
 import android.view.View;
+
 import com.facebook.react.bridge.BaseJavaModule;
 import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.uimanager.StateWrapper;
 import com.facebook.react.touch.JSResponderHandler;
 import com.facebook.react.touch.ReactInterceptingViewGroup;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
 import com.facebook.react.uimanager.annotations.ReactPropertyHolder;
 import com.facebook.yoga.YogaMeasureMode;
+
 import java.util.Map;
 
 import javax.annotation.Nonnull;
@@ -50,16 +50,18 @@ public abstract class ViewManager<T extends View, C extends ReactShadowNode>
   /**
    * Creates a view and installs event emitters on it.
    */
-  private final @Nonnull T createView(
-      @Nonnull ThemedReactContext reactContext,
-      JSResponderHandler jsResponderHandler) {
+  private final @Nonnull
+  T createView(
+    @Nonnull ThemedReactContext reactContext,
+    JSResponderHandler jsResponderHandler) {
     return this.createViewWithProps(reactContext, null, jsResponderHandler);
   }
 
   /**
    * Creates a view with knowledge of props.
    */
-  public @Nonnull T createViewWithProps(
+  public @Nonnull
+  T createViewWithProps(
     @Nonnull ThemedReactContext reactContext,
     ReactStylesDiffMap props,
     JSResponderHandler jsResponderHandler) {
@@ -76,7 +78,8 @@ public abstract class ViewManager<T extends View, C extends ReactShadowNode>
    * @return the name of this view manager. This will be the name used to reference this view
    * manager from JavaScript in createReactNativeComponentClass.
    */
-  public abstract @Nonnull String getName();
+  public abstract @Nonnull
+  String getName();
 
   /**
    * This method should return a subclass of {@link ReactShadowNode} which will be then used for
@@ -87,7 +90,8 @@ public abstract class ViewManager<T extends View, C extends ReactShadowNode>
     throw new RuntimeException("ViewManager subclasses must implement createShadowNodeInstance()");
   }
 
-  public @Nonnull C createShadowNodeInstance(@Nonnull ReactApplicationContext context) {
+  public @Nonnull
+  C createShadowNodeInstance(@Nonnull ReactApplicationContext context) {
     return createShadowNodeInstance();
   }
 
@@ -107,7 +111,8 @@ public abstract class ViewManager<T extends View, C extends ReactShadowNode>
    * Subclasses should return a new View instance of the proper type.
    * @param reactContext
    */
-  protected abstract @Nonnull T createViewInstance(@Nonnull ThemedReactContext reactContext);
+  protected abstract @Nonnull
+  T createViewInstance(@Nonnull ThemedReactContext reactContext);
 
   /**
    * Subclasses should return a new View instance of the proper type.
@@ -115,7 +120,8 @@ public abstract class ViewManager<T extends View, C extends ReactShadowNode>
    * Override it if you need props upon creation of the view.
    * @param reactContext
    */
-  protected @Nonnull T createViewInstanceWithProps(@Nonnull ThemedReactContext reactContext, ReactStylesDiffMap initialProps) {
+  protected @Nonnull
+  T createViewInstanceWithProps(@Nonnull ThemedReactContext reactContext, ReactStylesDiffMap initialProps) {
     T view = createViewInstance(reactContext);
     if (initialProps != null) {
       updateProperties(view, initialProps);
@@ -180,7 +186,8 @@ public abstract class ViewManager<T extends View, C extends ReactShadowNode>
    *
    * @return map of string to int mapping of the expected commands
    */
-  public @Nullable Map<String, Integer> getCommandsMap() {
+  public @Nullable
+  Map<String, Integer> getCommandsMap() {
     return null;
   }
 
@@ -199,7 +206,8 @@ public abstract class ViewManager<T extends View, C extends ReactShadowNode>
    *   }
    * }
    */
-  public @Nullable Map<String, Object> getExportedCustomBubblingEventTypeConstants() {
+  public @Nullable
+  Map<String, Object> getExportedCustomBubblingEventTypeConstants() {
     return null;
   }
 
@@ -214,7 +222,8 @@ public abstract class ViewManager<T extends View, C extends ReactShadowNode>
    *   }
    * }
    */
-  public @Nullable Map<String, Object> getExportedCustomDirectEventTypeConstants() {
+  public @Nullable
+  Map<String, Object> getExportedCustomDirectEventTypeConstants() {
     return null;
   }
 
@@ -222,7 +231,8 @@ public abstract class ViewManager<T extends View, C extends ReactShadowNode>
    * Returns a map of view-specific constants that are injected to JavaScript. These constants are
    * made accessible via UIManager.<ViewName>.Constants.
    */
-  public @Nullable Map<String, Object> getExportedViewConstants() {
+  public @Nullable
+  Map<String, Object> getExportedViewConstants() {
     return null;
   }
 
@@ -230,26 +240,20 @@ public abstract class ViewManager<T extends View, C extends ReactShadowNode>
     return ViewManagerPropertyUpdater.getNativeProps(getClass(), getShadowNodeClass());
   }
 
-  public @Nullable Object updateLocalData( @Nonnull T view, ReactStylesDiffMap props, ReactStylesDiffMap localData) {
+  public @Nullable
+  Object updateLocalData(@Nonnull T view, ReactStylesDiffMap props, ReactStylesDiffMap localData) {
     return null;
   }
 
-  /**
-   * Subclasses can implement this method to receive state updates shared between all instances
-   * of this component type.
-   */
-  public void updateState(@Nonnull T view, StateWrapper stateWrapper) {
-  }
-
   public long measure(
-      Context context,
-      ReadableMap localData,
-      ReadableMap props,
-      ReadableMap state,
-      float width,
-      YogaMeasureMode widthMode,
-      float height,
-      YogaMeasureMode heightMode) {
+    Context context,
+    ReadableMap localData,
+    ReadableMap props,
+    ReadableMap state,
+    float width,
+    YogaMeasureMode widthMode,
+    float height,
+    YogaMeasureMode heightMode) {
     return 0;
   }
 }

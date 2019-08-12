@@ -6,17 +6,14 @@
  */
 package com.facebook.react.uimanager;
 
-import static com.facebook.react.bridge.ReactMarkerConstants.CREATE_UI_MANAGER_MODULE_CONSTANTS_END;
-import static com.facebook.react.bridge.ReactMarkerConstants.CREATE_UI_MANAGER_MODULE_CONSTANTS_START;
-import static com.facebook.react.uimanager.common.UIManagerType.DEFAULT;
-import static com.facebook.react.uimanager.common.UIManagerType.FABRIC;
-
 import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.view.View;
+
 import androidx.collection.ArrayMap;
+
 import com.facebook.common.logging.FLog;
 import com.facebook.debug.holder.PrinterHolder;
 import com.facebook.debug.tags.ReactDebugOverlayTags;
@@ -36,19 +33,22 @@ import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.common.ReactConstants;
-import com.facebook.react.common.annotations.VisibleForTesting;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.common.ViewUtil;
 import com.facebook.react.uimanager.debug.NotThreadSafeViewHierarchyUpdateDebugListener;
 import com.facebook.react.uimanager.events.EventDispatcher;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.systrace.Systrace;
 import com.facebook.systrace.SystraceMessage;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Nullable;
+
+import static com.facebook.react.bridge.ReactMarkerConstants.CREATE_UI_MANAGER_MODULE_CONSTANTS_END;
+import static com.facebook.react.bridge.ReactMarkerConstants.CREATE_UI_MANAGER_MODULE_CONSTANTS_START;
 
 /**
  * Native module to allow JS to create and update native Views.
@@ -56,7 +56,7 @@ import javax.annotation.Nullable;
  * <p>
  *
  * <h2>== Transactional Requirement ==</h2>
- *
+ * <p>
  * A requirement of this class is to make sure that transactional UI updates occur all at once,
  * meaning that no intermediate state is ever rendered to the screen. For example, if a JS
  * application update changes the background of View A to blue and the width of View B to 100, both
@@ -70,7 +70,7 @@ import javax.annotation.Nullable;
  * <p>
  *
  * <h2>== CSSNodes ==</h2>
- *
+ * <p>
  * In order to allow layout and measurement to occur on a non-UI thread, this module also operates
  * on intermediate CSSNodeDEPRECATED objects that correspond to a native view. These
  * CSSNodeDEPRECATED are able to calculate layout according to their styling rules, and then the
@@ -81,9 +81,11 @@ import javax.annotation.Nullable;
  */
 @ReactModule(name = UIManagerModule.NAME)
 public class UIManagerModule extends ReactContextBaseJavaModule
-    implements OnBatchCompleteListener, LifecycleEventListener, UIManager {
+  implements OnBatchCompleteListener, LifecycleEventListener, UIManager {
 
-  /** Enables lazy discovery of a specific {@link ViewManager} by its name. */
+  /**
+   * Enables lazy discovery of a specific {@link ViewManager} by its name.
+   */
   public interface ViewManagerResolver {
     /**
      * {@class UIManagerModule} class uses this method to get a ViewManager by its name. This is the
@@ -98,9 +100,13 @@ public class UIManagerModule extends ReactContextBaseJavaModule
     List<String> getViewManagerNames();
   }
 
-  /** Resolves a name coming from native side to a name of the event that is exposed to JS. */
+  /**
+   * Resolves a name coming from native side to a name of the event that is exposed to JS.
+   */
   public interface CustomEventNamesResolver {
-    /** Returns custom event name by the provided event name. */
+    /**
+     * Returns custom event name by the provided event name.
+     */
     @Nullable
     String resolveCustomEventName(String eventName);
   }
@@ -108,7 +114,7 @@ public class UIManagerModule extends ReactContextBaseJavaModule
   public static final String NAME = "UIManager";
 
   private static final boolean DEBUG =
-      PrinterHolder.getPrinter().shouldDisplayLogMessage(ReactDebugOverlayTags.UI_MANAGER);
+    PrinterHolder.getPrinter().shouldDisplayLogMessage(ReactDebugOverlayTags.UI_MANAGER);
 
   private final EventDispatcher mEventDispatcher;
   private final Map<String, Object> mModuleConstants;
@@ -117,41 +123,42 @@ public class UIManagerModule extends ReactContextBaseJavaModule
   private final UIImplementation mUIImplementation;
   private final MemoryTrimCallback mMemoryTrimCallback = new MemoryTrimCallback();
   private final List<UIManagerModuleListener> mListeners = new ArrayList<>();
-  private @Nullable Map<String, WritableMap> mViewManagerConstantsCache;
+  private @Nullable
+  Map<String, WritableMap> mViewManagerConstantsCache;
   private volatile int mViewManagerConstantsCacheSize;
 
   private int mBatchId = 0;
 
   @SuppressWarnings("deprecated")
   public UIManagerModule(
-      ReactApplicationContext reactContext,
-      ViewManagerResolver viewManagerResolver,
-      int minTimeLeftInFrameForNonBatchedOperationMs) {
+    ReactApplicationContext reactContext,
+    ViewManagerResolver viewManagerResolver,
+    int minTimeLeftInFrameForNonBatchedOperationMs) {
     this(
-        reactContext,
-        viewManagerResolver,
-        new UIImplementationProvider(),
-        minTimeLeftInFrameForNonBatchedOperationMs);
+      reactContext,
+      viewManagerResolver,
+      new UIImplementationProvider(),
+      minTimeLeftInFrameForNonBatchedOperationMs);
   }
 
   @SuppressWarnings("deprecated")
   public UIManagerModule(
-      ReactApplicationContext reactContext,
-      List<ViewManager> viewManagersList,
-      int minTimeLeftInFrameForNonBatchedOperationMs) {
+    ReactApplicationContext reactContext,
+    List<ViewManager> viewManagersList,
+    int minTimeLeftInFrameForNonBatchedOperationMs) {
     this(
-        reactContext,
-        viewManagersList,
-        new UIImplementationProvider(),
-        minTimeLeftInFrameForNonBatchedOperationMs);
+      reactContext,
+      viewManagersList,
+      new UIImplementationProvider(),
+      minTimeLeftInFrameForNonBatchedOperationMs);
   }
 
   @Deprecated
   public UIManagerModule(
-      ReactApplicationContext reactContext,
-      ViewManagerResolver viewManagerResolver,
-      UIImplementationProvider uiImplementationProvider,
-      int minTimeLeftInFrameForNonBatchedOperationMs) {
+    ReactApplicationContext reactContext,
+    ViewManagerResolver viewManagerResolver,
+    UIImplementationProvider uiImplementationProvider,
+    int minTimeLeftInFrameForNonBatchedOperationMs) {
     super(reactContext);
     DisplayMetricsHolder.initDisplayMetricsIfNotInitialized(reactContext);
     mEventDispatcher = new EventDispatcher(reactContext);
@@ -159,21 +166,21 @@ public class UIManagerModule extends ReactContextBaseJavaModule
     mCustomDirectEvents = UIManagerModuleConstants.getDirectEventTypeConstants();
     mViewManagerRegistry = new ViewManagerRegistry(viewManagerResolver);
     mUIImplementation =
-        uiImplementationProvider.createUIImplementation(
-            reactContext,
-            mViewManagerRegistry,
-            mEventDispatcher,
-            minTimeLeftInFrameForNonBatchedOperationMs);
+      uiImplementationProvider.createUIImplementation(
+        reactContext,
+        mViewManagerRegistry,
+        mEventDispatcher,
+        minTimeLeftInFrameForNonBatchedOperationMs);
 
     reactContext.addLifecycleEventListener(this);
   }
 
   @Deprecated
   public UIManagerModule(
-      ReactApplicationContext reactContext,
-      List<ViewManager> viewManagersList,
-      UIImplementationProvider uiImplementationProvider,
-      int minTimeLeftInFrameForNonBatchedOperationMs) {
+    ReactApplicationContext reactContext,
+    List<ViewManager> viewManagersList,
+    UIImplementationProvider uiImplementationProvider,
+    int minTimeLeftInFrameForNonBatchedOperationMs) {
     super(reactContext);
     DisplayMetricsHolder.initDisplayMetricsIfNotInitialized(reactContext);
     mEventDispatcher = new EventDispatcher(reactContext);
@@ -181,11 +188,11 @@ public class UIManagerModule extends ReactContextBaseJavaModule
     mModuleConstants = createConstants(viewManagersList, null, mCustomDirectEvents);
     mViewManagerRegistry = new ViewManagerRegistry(viewManagersList);
     mUIImplementation =
-        uiImplementationProvider.createUIImplementation(
-            reactContext,
-            mViewManagerRegistry,
-            mEventDispatcher,
-            minTimeLeftInFrameForNonBatchedOperationMs);
+      uiImplementationProvider.createUIImplementation(
+        reactContext,
+        mViewManagerRegistry,
+        mEventDispatcher,
+        minTimeLeftInFrameForNonBatchedOperationMs);
 
     reactContext.addLifecycleEventListener(this);
   }
@@ -211,8 +218,6 @@ public class UIManagerModule extends ReactContextBaseJavaModule
   @Override
   public void initialize() {
     getReactApplicationContext().registerComponentCallbacks(mMemoryTrimCallback);
-    mEventDispatcher.registerEventEmitter(
-        DEFAULT, getReactApplicationContext().getJSModule(RCTEventEmitter.class));
   }
 
   @Override
@@ -240,20 +245,11 @@ public class UIManagerModule extends ReactContextBaseJavaModule
     ViewManagerPropertyUpdater.clear();
   }
 
-  /**
-   * This method is intended to reuse the {@link ViewManagerRegistry} with FabricUIManager.
-   * Do not use this method as this will be removed in the near future.
-   */
-  @Deprecated
-  public ViewManagerRegistry getViewManagerRegistry_DO_NOT_USE() {
-    return mViewManagerRegistry;
-  }
-
   private static Map<String, Object> createConstants(ViewManagerResolver viewManagerResolver) {
     ReactMarker.logMarker(CREATE_UI_MANAGER_MODULE_CONSTANTS_START);
     SystraceMessage.beginSection(Systrace.TRACE_TAG_REACT_JAVA_BRIDGE, "CreateUIManagerConstants")
-        .arg("Lazy", true)
-        .flush();
+      .arg("Lazy", true)
+      .flush();
     try {
       return UIManagerModuleConstantsHelper.createConstants(viewManagerResolver);
     } finally {
@@ -263,16 +259,16 @@ public class UIManagerModule extends ReactContextBaseJavaModule
   }
 
   private static Map<String, Object> createConstants(
-      List<ViewManager> viewManagers,
-      @Nullable Map<String, Object> customBubblingEvents,
-      @Nullable Map<String, Object> customDirectEvents) {
+    List<ViewManager> viewManagers,
+    @Nullable Map<String, Object> customBubblingEvents,
+    @Nullable Map<String, Object> customDirectEvents) {
     ReactMarker.logMarker(CREATE_UI_MANAGER_MODULE_CONSTANTS_START);
     SystraceMessage.beginSection(Systrace.TRACE_TAG_REACT_JAVA_BRIDGE, "CreateUIManagerConstants")
-        .arg("Lazy", false)
-        .flush();
+      .arg("Lazy", false)
+      .flush();
     try {
       return UIManagerModuleConstantsHelper.createConstants(
-          viewManagers, customBubblingEvents, customDirectEvents);
+        viewManagers, customBubblingEvents, customDirectEvents);
     } finally {
       Systrace.endSection(Systrace.TRACE_TAG_REACT_JAVA_BRIDGE);
       ReactMarker.logMarker(CREATE_UI_MANAGER_MODULE_CONSTANTS_END);
@@ -306,9 +302,10 @@ public class UIManagerModule extends ReactContextBaseJavaModule
   }
 
   @ReactMethod(isBlockingSynchronousMethod = true)
-  public @Nullable WritableMap getConstantsForViewManager(final String viewManagerName) {
+  public @Nullable
+  WritableMap getConstantsForViewManager(final String viewManagerName) {
     if (mViewManagerConstantsCache != null
-        && mViewManagerConstantsCache.containsKey(viewManagerName)) {
+      && mViewManagerConstantsCache.containsKey(viewManagerName)) {
       WritableMap constants = mViewManagerConstantsCache.get(viewManagerName);
       if (--mViewManagerConstantsCacheSize <= 0) {
         // Looks like we have read all the values from the cache, so we may as well free this cache
@@ -320,22 +317,23 @@ public class UIManagerModule extends ReactContextBaseJavaModule
     }
   }
 
-  private @Nullable WritableMap computeConstantsForViewManager(final String viewManagerName) {
+  private @Nullable
+  WritableMap computeConstantsForViewManager(final String viewManagerName) {
     ViewManager targetView =
-        viewManagerName != null ? mUIImplementation.resolveViewManager(viewManagerName) : null;
+      viewManagerName != null ? mUIImplementation.resolveViewManager(viewManagerName) : null;
     if (targetView == null) {
       return null;
     }
 
     SystraceMessage.beginSection(
-            Systrace.TRACE_TAG_REACT_JAVA_BRIDGE, "UIManagerModule.getConstantsForViewManager")
-        .arg("ViewManager", targetView.getName())
-        .arg("Lazy", true)
-        .flush();
+      Systrace.TRACE_TAG_REACT_JAVA_BRIDGE, "UIManagerModule.getConstantsForViewManager")
+      .arg("ViewManager", targetView.getName())
+      .arg("Lazy", true)
+      .flush();
     try {
       Map<String, Object> viewManagerConstants =
-          UIManagerModuleConstantsHelper.createConstantsForViewManager(
-              targetView, null, null, null, mCustomDirectEvents);
+        UIManagerModuleConstantsHelper.createConstantsForViewManager(
+          targetView, null, null, null, mCustomDirectEvents);
       if (viewManagerConstants != null) {
         return Arguments.makeNativeMap(viewManagerConstants);
       }
@@ -350,13 +348,16 @@ public class UIManagerModule extends ReactContextBaseJavaModule
     return Arguments.makeNativeMap(UIManagerModuleConstantsHelper.getDefaultExportableEventTypes());
   }
 
-  /** Resolves Direct Event name exposed to JS from the one known to the Native side. */
+  /**
+   * Resolves Direct Event name exposed to JS from the one known to the Native side.
+   */
   public CustomEventNamesResolver getDirectEventNamesResolver() {
     return new CustomEventNamesResolver() {
       @Override
-      public @Nullable String resolveCustomEventName(String eventName) {
+      public @Nullable
+      String resolveCustomEventName(String eventName) {
         Map<String, String> customEventType =
-            (Map<String, String>) mCustomDirectEvents.get(eventName);
+          (Map<String, String>) mCustomDirectEvents.get(eventName);
         if (customEventType != null) {
           return customEventType.get("registrationName");
         }
@@ -376,9 +377,9 @@ public class UIManagerModule extends ReactContextBaseJavaModule
   }
 
   public <T extends View> int addRootView(
-      final T rootView) {
-        return addRootView(rootView, null, null);
-      }
+    final T rootView) {
+    return addRootView(rootView, null, null);
+  }
 
   /**
    * Used by native animated module to bypass the process of updating the values through the shadow
@@ -388,13 +389,7 @@ public class UIManagerModule extends ReactContextBaseJavaModule
    */
   @Override
   public void synchronouslyUpdateViewOnUIThread(int tag, ReadableMap props) {
-    int uiManagerType = ViewUtil.getUIManagerType(tag);
-    if (uiManagerType == FABRIC) {
-      UIManager fabricUIManager = UIManagerHelper.getUIManager(getReactApplicationContext(), uiManagerType);
-      fabricUIManager.synchronouslyUpdateViewOnUIThread(tag, props);
-    } else {
-      mUIImplementation.synchronouslyUpdateViewOnUIThread(tag, new ReactStylesDiffMap(props));
-    }
+    mUIImplementation.synchronouslyUpdateViewOnUIThread(tag, new ReactStylesDiffMap(props));
   }
 
   /**
@@ -408,12 +403,12 @@ public class UIManagerModule extends ReactContextBaseJavaModule
    */
   @Override
   public <T extends View> int addRootView(
-      final T rootView, WritableMap initialProps, @Nullable String initialUITemplate) {
+    final T rootView, WritableMap initialProps, @Nullable String initialUITemplate) {
     Systrace.beginSection(Systrace.TRACE_TAG_REACT_JAVA_BRIDGE, "UIManagerModule.addRootView");
     final int tag = ReactRootViewTagGenerator.getNextRootViewTag();
     final ReactApplicationContext reactApplicationContext = getReactApplicationContext();
     final ThemedReactContext themedRootContext =
-        new ThemedReactContext(reactApplicationContext, rootView.getContext());
+      new ThemedReactContext(reactApplicationContext, rootView.getContext());
 
     mUIImplementation.registerRootView(rootView, tag, themedRootContext);
     Systrace.endSection(Systrace.TRACE_TAG_REACT_JAVA_BRIDGE);
@@ -444,19 +439,19 @@ public class UIManagerModule extends ReactContextBaseJavaModule
     reactApplicationContext.assertOnUiQueueThread();
 
     reactApplicationContext.runOnNativeModulesQueueThread(
-        new GuardedRunnable(reactApplicationContext) {
-          @Override
-          public void runGuarded() {
-            mUIImplementation.setViewLocalData(tag, data);
-          }
-        });
+      new GuardedRunnable(reactApplicationContext) {
+        @Override
+        public void runGuarded() {
+          mUIImplementation.setViewLocalData(tag, data);
+        }
+      });
   }
 
   @ReactMethod
   public void createView(int tag, String className, int rootViewTag, ReadableMap props) {
     if (DEBUG) {
       String message =
-          "(UIManager.createView) tag: " + tag + ", class: " + className + ", props: " + props;
+        "(UIManager.createView) tag: " + tag + ", class: " + className + ", props: " + props;
       FLog.d(ReactConstants.TAG, message);
       PrinterHolder.getPrinter().logMessage(ReactDebugOverlayTags.UI_MANAGER, message);
     }
@@ -467,64 +462,58 @@ public class UIManagerModule extends ReactContextBaseJavaModule
   public void updateView(int tag, String className, ReadableMap props) {
     if (DEBUG) {
       String message =
-          "(UIManager.updateView) tag: " + tag + ", class: " + className + ", props: " + props;
+        "(UIManager.updateView) tag: " + tag + ", class: " + className + ", props: " + props;
       FLog.d(ReactConstants.TAG, message);
       PrinterHolder.getPrinter().logMessage(ReactDebugOverlayTags.UI_MANAGER, message);
     }
-    int uiManagerType = ViewUtil.getUIManagerType(tag);
-    if (uiManagerType == FABRIC) {
-      UIManager fabricUIManager = UIManagerHelper.getUIManager(getReactApplicationContext(), uiManagerType);
-      fabricUIManager.synchronouslyUpdateViewOnUIThread(tag, props);
-    } else {
-      mUIImplementation.updateView(tag, className, props);
-    }
+    mUIImplementation.updateView(tag, className, props);
   }
 
   /**
    * Interface for adding/removing/moving views within a parent view from JS.
    *
-   * @param viewTag the view tag of the parent view
-   * @param moveFrom a list of indices in the parent view to move views from
-   * @param moveTo parallel to moveFrom, a list of indices in the parent view to move views to
+   * @param viewTag      the view tag of the parent view
+   * @param moveFrom     a list of indices in the parent view to move views from
+   * @param moveTo       parallel to moveFrom, a list of indices in the parent view to move views to
    * @param addChildTags a list of tags of views to add to the parent
    * @param addAtIndices parallel to addChildTags, a list of indices to insert those children at
-   * @param removeFrom a list of indices of views to permanently remove. The memory for the
-   *     corresponding views and data structures should be reclaimed.
+   * @param removeFrom   a list of indices of views to permanently remove. The memory for the
+   *                     corresponding views and data structures should be reclaimed.
    */
   @ReactMethod
   public void manageChildren(
-      int viewTag,
-      @Nullable ReadableArray moveFrom,
-      @Nullable ReadableArray moveTo,
-      @Nullable ReadableArray addChildTags,
-      @Nullable ReadableArray addAtIndices,
-      @Nullable ReadableArray removeFrom) {
+    int viewTag,
+    @Nullable ReadableArray moveFrom,
+    @Nullable ReadableArray moveTo,
+    @Nullable ReadableArray addChildTags,
+    @Nullable ReadableArray addAtIndices,
+    @Nullable ReadableArray removeFrom) {
     if (DEBUG) {
       String message =
-          "(UIManager.manageChildren) tag: "
-              + viewTag
-              + ", moveFrom: "
-              + moveFrom
-              + ", moveTo: "
-              + moveTo
-              + ", addTags: "
-              + addChildTags
-              + ", atIndices: "
-              + addAtIndices
-              + ", removeFrom: "
-              + removeFrom;
+        "(UIManager.manageChildren) tag: "
+          + viewTag
+          + ", moveFrom: "
+          + moveFrom
+          + ", moveTo: "
+          + moveTo
+          + ", addTags: "
+          + addChildTags
+          + ", atIndices: "
+          + addAtIndices
+          + ", removeFrom: "
+          + removeFrom;
       FLog.d(ReactConstants.TAG, message);
       PrinterHolder.getPrinter().logMessage(ReactDebugOverlayTags.UI_MANAGER, message);
     }
     mUIImplementation.manageChildren(
-        viewTag, moveFrom, moveTo, addChildTags, addAtIndices, removeFrom);
+      viewTag, moveFrom, moveTo, addChildTags, addAtIndices, removeFrom);
   }
 
   /**
    * Interface for fast tracking the initial adding of views. Children view tags are assumed to be
    * in order
    *
-   * @param viewTag the view tag of the parent view
+   * @param viewTag      the view tag of the parent view
    * @param childrenTags An array of tags to add to the parent in order
    */
   @ReactMethod
@@ -589,7 +578,7 @@ public class UIManagerModule extends ReactContextBaseJavaModule
    */
   @ReactMethod
   public void measureLayout(
-      int tag, int ancestorTag, Callback errorCallback, Callback successCallback) {
+    int tag, int ancestorTag, Callback errorCallback, Callback successCallback) {
     mUIImplementation.measureLayout(tag, ancestorTag, errorCallback, successCallback);
   }
 
@@ -602,7 +591,7 @@ public class UIManagerModule extends ReactContextBaseJavaModule
    */
   @ReactMethod
   public void measureLayoutRelativeToParent(
-      int tag, Callback errorCallback, Callback successCallback) {
+    int tag, Callback errorCallback, Callback successCallback) {
     mUIImplementation.measureLayoutRelativeToParent(tag, errorCallback, successCallback);
   }
 
@@ -613,24 +602,26 @@ public class UIManagerModule extends ReactContextBaseJavaModule
    * <p>This method is currently used only by Element Inspector DevTool.
    *
    * @param reactTag the tag of the root view to traverse
-   * @param point an array containing both X and Y target location
+   * @param point    an array containing both X and Y target location
    * @param callback will be called if with the identified child view react ID, and measurement
-   *     info. If no view was found, callback will be invoked with no data.
+   *                 info. If no view was found, callback will be invoked with no data.
    */
   @ReactMethod
   public void findSubviewIn(
-      final int reactTag, final ReadableArray point, final Callback callback) {
+    final int reactTag, final ReadableArray point, final Callback callback) {
     mUIImplementation.findSubviewIn(
-        reactTag,
-        Math.round(PixelUtil.toPixelFromDIP(point.getDouble(0))),
-        Math.round(PixelUtil.toPixelFromDIP(point.getDouble(1))),
-        callback);
+      reactTag,
+      Math.round(PixelUtil.toPixelFromDIP(point.getDouble(0))),
+      Math.round(PixelUtil.toPixelFromDIP(point.getDouble(1))),
+      callback);
   }
 
-  /** Check if the first shadow node is the descendant of the second shadow node */
+  /**
+   * Check if the first shadow node is the descendant of the second shadow node
+   */
   @ReactMethod
   public void viewIsDescendantOf(
-      final int reactTag, final int ancestorReactTag, final Callback callback) {
+    final int reactTag, final int ancestorReactTag, final Callback callback) {
     mUIImplementation.viewIsDescendantOf(reactTag, ancestorReactTag, callback);
   }
 
@@ -648,11 +639,9 @@ public class UIManagerModule extends ReactContextBaseJavaModule
 
   @ReactMethod
   public void dispatchViewManagerCommand(
-      int reactTag, int commandId, @Nullable ReadableArray commandArgs) {
-    // TODO: this is a temporary approach to support ViewManagerCommands in Fabric until
-    // the dispatchViewManagerCommand() method is supported by Fabric JS API.
-    UIManagerHelper.getUIManager(getReactApplicationContext(), ViewUtil.getUIManagerType(reactTag))
-        .dispatchCommand(reactTag, commandId, commandArgs);
+    int reactTag, int commandId, @Nullable ReadableArray commandArgs) {
+    UIManagerHelper.getUIManager(getReactApplicationContext())
+      .dispatchCommand(reactTag, commandId, commandArgs);
   }
 
   @Override
@@ -663,7 +652,7 @@ public class UIManagerModule extends ReactContextBaseJavaModule
   @ReactMethod
   public void playTouchSound() {
     AudioManager audioManager =
-        (AudioManager) getReactApplicationContext().getSystemService(Context.AUDIO_SERVICE);
+      (AudioManager) getReactApplicationContext().getSystemService(Context.AUDIO_SERVICE);
     if (audioManager != null) {
       audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK);
     }
@@ -673,11 +662,11 @@ public class UIManagerModule extends ReactContextBaseJavaModule
    * Show a PopupMenu.
    *
    * @param reactTag the tag of the anchor view (the PopupMenu is displayed next to this view); this
-   *     needs to be the tag of a native view (shadow views can not be anchors)
-   * @param items the menu items as an array of strings
-   * @param error will be called if there is an error displaying the menu
-   * @param success will be called with the position of the selected item as the first argument, or
-   *     no arguments if the menu is dismissed
+   *                 needs to be the tag of a native view (shadow views can not be anchors)
+   * @param items    the menu items as an array of strings
+   * @param error    will be called if there is an error displaying the menu
+   * @param success  will be called with the position of the selected item as the first argument, or
+   *                 no arguments if the menu is dismissed
    */
   @ReactMethod
   public void showPopupMenu(int reactTag, ReadableArray items, Callback error, Callback success) {
@@ -711,10 +700,10 @@ public class UIManagerModule extends ReactContextBaseJavaModule
    *
    * <p>TODO(7728153) : animating view deletion is currently not supported.
    *
-   * @param config the configuration of the animation for view addition/removal/update.
+   * @param config  the configuration of the animation for view addition/removal/update.
    * @param success will be called when the animation completes, or when the animation get
-   *     interrupted. In this case, callback parameter will be false.
-   * @param error will be called if there was an error processing the animation
+   *                interrupted. In this case, callback parameter will be false.
+   * @param error   will be called if there was an error processing the animation
    */
   @ReactMethod
   public void configureNextLayoutAnimation(ReadableMap config, Callback success, Callback error) {
@@ -741,8 +730,8 @@ public class UIManagerModule extends ReactContextBaseJavaModule
     mBatchId++;
 
     SystraceMessage.beginSection(Systrace.TRACE_TAG_REACT_JAVA_BRIDGE, "onBatchCompleteUI")
-        .arg("BatchId", batchId)
-        .flush();
+      .arg("BatchId", batchId)
+      .flush();
     for (UIManagerModuleListener listener : mListeners) {
       listener.willDispatchViewUpdates(this);
     }
@@ -754,7 +743,7 @@ public class UIManagerModule extends ReactContextBaseJavaModule
   }
 
   public void setViewHierarchyUpdateDebugListener(
-      @Nullable NotThreadSafeViewHierarchyUpdateDebugListener listener) {
+    @Nullable NotThreadSafeViewHierarchyUpdateDebugListener listener) {
     mUIImplementation.setViewHierarchyUpdateDebugListener(listener);
   }
 
@@ -772,11 +761,11 @@ public class UIManagerModule extends ReactContextBaseJavaModule
    * after all currently queued view updates have completed.
    *
    * @param block that contains UI logic you want to execute.
-   *     <p>Usage Example:
-   *     <p>UIManagerModule uiManager = reactContext.getNativeModule(UIManagerModule.class);
-   *     uiManager.addUIBlock(new UIBlock() { public void execute (NativeViewHierarchyManager nvhm)
-   *     { View view = nvhm.resolveView(tag); // ...execute your code on View (e.g. snapshot the
-   *     view) } });
+   *              <p>Usage Example:
+   *              <p>UIManagerModule uiManager = reactContext.getNativeModule(UIManagerModule.class);
+   *              uiManager.addUIBlock(new UIBlock() { public void execute (NativeViewHierarchyManager nvhm)
+   *              { View view = nvhm.resolveView(tag); // ...execute your code on View (e.g. snapshot the
+   *              view) } });
    */
   public void addUIBlock(UIBlock block) {
     mUIImplementation.addUIBlock(block);
@@ -809,17 +798,19 @@ public class UIManagerModule extends ReactContextBaseJavaModule
    */
   public int resolveRootTagFromReactTag(int reactTag) {
     return ViewUtil.isRootTag(reactTag)
-        ? reactTag
-        : mUIImplementation.resolveRootTagFromReactTag(reactTag);
+      ? reactTag
+      : mUIImplementation.resolveRootTagFromReactTag(reactTag);
   }
 
-  /** Dirties the node associated with the given react tag */
+  /**
+   * Dirties the node associated with the given react tag
+   */
   public void invalidateNodeLayout(int tag) {
     ReactShadowNode node = mUIImplementation.resolveShadowNode(tag);
     if (node == null) {
       FLog.w(
-          ReactConstants.TAG,
-          "Warning : attempted to dirty a non-existent react shadow node. reactTag=" + tag);
+        ReactConstants.TAG,
+        "Warning : attempted to dirty a non-existent react shadow node. reactTag=" + tag);
       return;
     }
     node.dirty();
@@ -831,19 +822,21 @@ public class UIManagerModule extends ReactContextBaseJavaModule
    * parameters.
    */
   public void updateRootLayoutSpecs(
-      final int rootViewTag, final int widthMeasureSpec, final int heightMeasureSpec) {
+    final int rootViewTag, final int widthMeasureSpec, final int heightMeasureSpec) {
     ReactApplicationContext reactApplicationContext = getReactApplicationContext();
     reactApplicationContext.runOnNativeModulesQueueThread(
-        new GuardedRunnable(reactApplicationContext) {
-          @Override
-          public void runGuarded() {
-            mUIImplementation.updateRootView(rootViewTag, widthMeasureSpec, heightMeasureSpec);
-            mUIImplementation.dispatchViewUpdates(-1);
-          }
-        });
+      new GuardedRunnable(reactApplicationContext) {
+        @Override
+        public void runGuarded() {
+          mUIImplementation.updateRootView(rootViewTag, widthMeasureSpec, heightMeasureSpec);
+          mUIImplementation.dispatchViewUpdates(-1);
+        }
+      });
   }
 
-  /** Listener that drops the CSSNode pool on low memory when the app is backgrounded. */
+  /**
+   * Listener that drops the CSSNode pool on low memory when the app is backgrounded.
+   */
   private class MemoryTrimCallback implements ComponentCallbacks2 {
 
     @Override
@@ -854,10 +847,12 @@ public class UIManagerModule extends ReactContextBaseJavaModule
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {}
+    public void onConfigurationChanged(Configuration newConfig) {
+    }
 
     @Override
-    public void onLowMemory() {}
+    public void onLowMemory() {
+    }
   }
 
   public View resolveView(int tag) {
