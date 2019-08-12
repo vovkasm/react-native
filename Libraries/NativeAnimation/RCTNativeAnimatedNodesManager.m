@@ -50,12 +50,6 @@
   return self;
 }
 
-- (BOOL)isNodeManagedByFabric:(nonnull NSNumber *)tag
-{
-  RCTAnimatedNode *node = _animationNodes[tag];
-  return [node isManagedByFabric];
-}
-
 #pragma mark -- Graph
 
 - (void)createAnimatedNode:(nonnull NSNumber *)tag
