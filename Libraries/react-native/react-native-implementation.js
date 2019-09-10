@@ -28,15 +28,6 @@ module.exports = {
   get Button() {
     return require('../Components/Button');
   },
-  get CheckBox() {
-    warnOnce(
-      'checkBox-moved',
-      'CheckBox has been extracted from react-native core and will be removed in a future release. ' +
-        "It can now be installed and imported from '@react-native-community/checkbox' instead of 'react-native'. " +
-        'See https://github.com/react-native-community/react-native-checkbox',
-    );
-    return require('../Components/CheckBox/CheckBox');
-  },
   get DatePickerIOS() {
     return require('../Components/DatePicker/DatePickerIOS');
   },
