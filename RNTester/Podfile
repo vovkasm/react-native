@@ -14,5 +14,4 @@ target 'RNTester' do
 
   # Additional Pods which aren't included in the default Podfile
   pod 'React-ART', :path => '../Libraries/ART'
-  pod 'React-RCTPushNotification', :path => '../Libraries/PushNotificationIOS'
 end

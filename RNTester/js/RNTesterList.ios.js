@@ -257,11 +257,6 @@ const APIExamples: Array<RNTesterExample> = [
     supportsTVOS: false,
   },
   {
-    key: 'PushNotificationIOSExample',
-    module: require('./PushNotificationIOSExample'),
-    supportsTVOS: false,
-  },
-  {
     key: 'RCTRootViewIOSExample',
     module: require('./RCTRootViewIOSExample'),
     supportsTVOS: true,

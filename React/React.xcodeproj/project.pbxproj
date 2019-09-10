@@ -283,7 +283,6 @@
 		3D302F271DF828F800D6DDAE /* RCTLinkingManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D1FA08B1DE4F4DD00E03CC6 /* RCTLinkingManager.h */; };
 		3D302F281DF828F800D6DDAE /* RCTNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D1FA07A1DE4F2EA00E03CC6 /* RCTNetworking.h */; };
 		3D302F291DF828F800D6DDAE /* RCTNetworkTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D1FA07B1DE4F2EA00E03CC6 /* RCTNetworkTask.h */; };
-		3D302F2A1DF828F800D6DDAE /* RCTPushNotificationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D1FA08D1DE4F4EE00E03CC6 /* RCTPushNotificationManager.h */; };
 		3D302F2B1DF828F800D6DDAE /* RCTAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = 83CBBA4A1A601E3B00E9B192 /* RCTAssert.h */; };
 		3D302F2C1DF828F800D6DDAE /* RCTBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 83CBBA5E1A601EAA00E9B192 /* RCTBridge.h */; };
 		3D302F2D1DF828F800D6DDAE /* RCTBridge+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A43DB81C1F849600794BC8 /* RCTBridge+Private.h */; };
@@ -453,7 +452,6 @@
 		3D80D9221DF6FA890028D040 /* RCTLinkingManager.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 3D1FA08B1DE4F4DD00E03CC6 /* RCTLinkingManager.h */; };
 		3D80D9231DF6FA890028D040 /* RCTNetworking.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 3D1FA07A1DE4F2EA00E03CC6 /* RCTNetworking.h */; };
 		3D80D9241DF6FA890028D040 /* RCTNetworkTask.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 3D1FA07B1DE4F2EA00E03CC6 /* RCTNetworkTask.h */; };
-		3D80D9251DF6FA890028D040 /* RCTPushNotificationManager.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 3D1FA08D1DE4F4EE00E03CC6 /* RCTPushNotificationManager.h */; };
 		3D80D9261DF6FA890028D040 /* RCTAssert.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 83CBBA4A1A601E3B00E9B192 /* RCTAssert.h */; };
 		3D80D9271DF6FA890028D040 /* RCTBridge.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 83CBBA5E1A601EAA00E9B192 /* RCTBridge.h */; };
 		3D80D9291DF6FA890028D040 /* RCTBridgeDelegate.h in Copy Headers */ = {isa = PBXBuildFile; fileRef = 1482F9E61B55B927000ADFF3 /* RCTBridgeDelegate.h */; };
@@ -546,7 +544,6 @@
 		3D80DA1C1DF820620028D040 /* RCTLinkingManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D1FA08B1DE4F4DD00E03CC6 /* RCTLinkingManager.h */; };
 		3D80DA1D1DF820620028D040 /* RCTNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D1FA07A1DE4F2EA00E03CC6 /* RCTNetworking.h */; };
 		3D80DA1E1DF820620028D040 /* RCTNetworkTask.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D1FA07B1DE4F2EA00E03CC6 /* RCTNetworkTask.h */; };
-		3D80DA1F1DF820620028D040 /* RCTPushNotificationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D1FA08D1DE4F4EE00E03CC6 /* RCTPushNotificationManager.h */; };
 		3D80DA201DF820620028D040 /* RCTAssert.h in Headers */ = {isa = PBXBuildFile; fileRef = 83CBBA4A1A601E3B00E9B192 /* RCTAssert.h */; };
 		3D80DA211DF820620028D040 /* RCTBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 83CBBA5E1A601EAA00E9B192 /* RCTBridge.h */; };
 		3D80DA221DF820620028D040 /* RCTBridge+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 14A43DB81C1F849600794BC8 /* RCTBridge+Private.h */; };
@@ -1550,7 +1547,6 @@
 				3D80D9221DF6FA890028D040 /* RCTLinkingManager.h in Copy Headers */,
 				3D80D9231DF6FA890028D040 /* RCTNetworking.h in Copy Headers */,
 				3D80D9241DF6FA890028D040 /* RCTNetworkTask.h in Copy Headers */,
-				3D80D9251DF6FA890028D040 /* RCTPushNotificationManager.h in Copy Headers */,
 				3D80D9261DF6FA890028D040 /* RCTAssert.h in Copy Headers */,
 				3D80D9271DF6FA890028D040 /* RCTBridge.h in Copy Headers */,
 				3D80D9291DF6FA890028D040 /* RCTBridgeDelegate.h in Copy Headers */,
@@ -1977,7 +1973,6 @@
 		3D1FA0841DE4F3A000E03CC6 /* RCTImageStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTImageStoreManager.h; sourceTree = "<group>"; };
 		3D1FA0851DE4F3A000E03CC6 /* RCTResizeMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTResizeMode.h; sourceTree = "<group>"; };
 		3D1FA08B1DE4F4DD00E03CC6 /* RCTLinkingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RCTLinkingManager.h; sourceTree = "<group>"; };
-		3D1FA08D1DE4F4EE00E03CC6 /* RCTPushNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RCTPushNotificationManager.h; path = PushNotificationIOS/RCTPushNotificationManager.h; sourceTree = "<group>"; };
 		3D37B5801D522B190042D5B5 /* RCTFont.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = RCTFont.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		3D37B5811D522B190042D5B5 /* RCTFont.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RCTFont.mm; sourceTree = "<group>"; };
 		3D383D3C1EBD27B6005632C8 /* libthird-party.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libthird-party.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2613,7 +2608,6 @@
 				3D1FA0821DE4F36600E03CC6 /* Image */,
 				3D1FA0891DE4F4B900E03CC6 /* LinkingIOS */,
 				3D1FA0791DE4F2D200E03CC6 /* Network */,
-				3D1FA08A1DE4F4D600E03CC6 /* PushNotificationIOS */,
 				3D7BFD2A1EA8E3D3008DFB7A /* WebSocket */,
 			);
 			name = Libraries;
@@ -2645,14 +2639,6 @@
 				3D1FA08B1DE4F4DD00E03CC6 /* RCTLinkingManager.h */,
 			);
 			path = LinkingIOS;
-			sourceTree = "<group>";
-		};
-		3D1FA08A1DE4F4D600E03CC6 /* PushNotificationIOS */ = {
-			isa = PBXGroup;
-			children = (
-				3D1FA08D1DE4F4EE00E03CC6 /* RCTPushNotificationManager.h */,
-			);
-			name = PushNotificationIOS;
 			sourceTree = "<group>";
 		};
 		3D7BFD0A1EA8E2D1008DFB7A /* DevSupport */ = {
@@ -3058,7 +3044,6 @@
 				3D302F281DF828F800D6DDAE /* RCTNetworking.h in Headers */,
 				3D302F291DF828F800D6DDAE /* RCTNetworkTask.h in Headers */,
 				3D7BFD2E1EA8E3FA008DFB7A /* RCTReconnectingWebSocket.h in Headers */,
-				3D302F2A1DF828F800D6DDAE /* RCTPushNotificationManager.h in Headers */,
 				3D302F2B1DF828F800D6DDAE /* RCTAssert.h in Headers */,
 				3D302F2C1DF828F800D6DDAE /* RCTBridge.h in Headers */,
 				3D302F2D1DF828F800D6DDAE /* RCTBridge+Private.h in Headers */,
@@ -3325,7 +3310,6 @@
 				3D80DA1D1DF820620028D040 /* RCTNetworking.h in Headers */,
 				3D80DA1E1DF820620028D040 /* RCTNetworkTask.h in Headers */,
 				657734841EE834C900A0E9EA /* RCTInspectorDevServerHelper.h in Headers */,
-				3D80DA1F1DF820620028D040 /* RCTPushNotificationManager.h in Headers */,
 				3D80DA201DF820620028D040 /* RCTAssert.h in Headers */,
 				3D80DA211DF820620028D040 /* RCTBridge.h in Headers */,
 				3D80DA221DF820620028D040 /* RCTBridge+Private.h in Headers */,

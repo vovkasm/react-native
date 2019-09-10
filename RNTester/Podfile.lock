@@ -76,8 +76,6 @@ PODS:
     - React-Core (= 0.60.0)
   - React-RCTNetwork (0.60.0):
     - React-Core (= 0.60.0)
-  - React-RCTPushNotification (0.60.0):
-    - React-Core (= 0.60.0)
   - React-RCTSettings (0.60.0):
     - React-Core (= 0.60.0)
   - React-RCTText (0.60.0):
@@ -133,7 +131,6 @@ DEPENDENCIES:
   - React-RCTImage (from `../Libraries/Image`)
   - React-RCTLinking (from `../Libraries/LinkingIOS`)
   - React-RCTNetwork (from `../Libraries/Network`)
-  - React-RCTPushNotification (from `../Libraries/PushNotificationIOS`)
   - React-RCTSettings (from `../Libraries/Settings`)
   - React-RCTText (from `../Libraries/Text`)
   - React-RCTVibration (from `../Libraries/Vibration`)
@@ -183,8 +180,6 @@ EXTERNAL SOURCES:
     :path: "../Libraries/LinkingIOS"
   React-RCTNetwork:
     :path: "../Libraries/Network"
-  React-RCTPushNotification:
-    :path: "../Libraries/PushNotificationIOS"
   React-RCTSettings:
     :path: "../Libraries/Settings"
   React-RCTText:
@@ -203,7 +198,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
-  Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
+  Folly: 8b80a9b97f8e5d79c15fbcf45842da6cdfaed2af
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   React: 4b3c068e793e96672dcd186a2b572fac43e4b031
   React-ART: e1929bca49c7c30161aee54e7619a096477f7b23
@@ -220,7 +215,6 @@ SPEC CHECKSUMS:
   React-RCTImage: 46b965d7225b428ea11580ead08a4318aef1d6be
   React-RCTLinking: d65b9f56cf0b8e171575a86764df7bb019ac28d6
   React-RCTNetwork: 783ee2f430740e58f724e46adc79fe7feff64202
-  React-RCTPushNotification: 18eb7b1ae1ef5ec343540b36b8d654be774c91de
   React-RCTSettings: aa28315aadfbfaf94206d865673ae509f1e97c07
   React-RCTText: 685fca2e13b024271048e7e247ef24476f28a41e
   React-RCTVibration: 4ee1cf208ab17a50fafb1c16ffe28fe594a64e4f
@@ -229,6 +223,6 @@ SPEC CHECKSUMS:
   React-turbomodule-samples: fe1ada9586680738d1183c609445050740a16153
   yoga: 616fde658be980aa60a2158835170f3f9c2d04b4
 
-PODFILE CHECKSUM: a05756b2681cb42f2851e1028b52111fdcedf5e4
+PODFILE CHECKSUM: 15ed49a63f4e43df6ccbca5da0b40a7c63473af7
 
 COCOAPODS: 1.7.5

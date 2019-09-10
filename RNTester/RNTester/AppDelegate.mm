@@ -18,10 +18,6 @@
 
 #import <cxxreact/JSExecutor.h>
 
-#if !TARGET_OS_TV
-#import <React/RCTPushNotificationManager.h>
-#endif
-
 #ifdef RN_TURBO_MODULE_ENABLED
 #import <jsireact/RCTTurboModuleManager.h>
 
@@ -133,42 +129,6 @@
 {
   // No custom initializer here.
   return [moduleClass new];
-}
-
-#endif
-
-# pragma mark - Push Notifications
-
-#if !TARGET_OS_TV
-
-// Required to register for notifications
-- (void)application:(__unused UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
-{
-  [RCTPushNotificationManager didRegisterUserNotificationSettings:notificationSettings];
-}
-
-// Required for the remoteNotificationsRegistered event.
-- (void)application:(__unused UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
-  [RCTPushNotificationManager didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
-}
-
-// Required for the remoteNotificationRegistrationError event.
-- (void)application:(__unused UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
-{
-  [RCTPushNotificationManager didFailToRegisterForRemoteNotificationsWithError:error];
-}
-
-// Required for the remoteNotificationReceived event.
-- (void)application:(__unused UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification
-{
-  [RCTPushNotificationManager didReceiveRemoteNotification:notification];
-}
-
-// Required for the localNotificationReceived event.
-- (void)application:(__unused UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-{
-  [RCTPushNotificationManager didReceiveLocalNotification:notification];
 }
 
 #endif
