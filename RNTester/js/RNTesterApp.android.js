@@ -13,7 +13,6 @@
 const React = require('react');
 const {
   AppRegistry,
-  AsyncStorage,
   BackHandler,
   Dimensions,
   DrawerLayoutAndroid,
@@ -45,8 +44,6 @@ type Props = {
   exampleFromAppetizeParams: string,
 };
 
-const APP_STATE_KEY = 'RNTesterAppState.v2';
-
 const HEADER_LOGO_ICON = nativeImageSource({
   android: 'launcher_icon',
   width: 132,
@@ -69,24 +66,11 @@ class RNTesterApp extends React.Component<Props, RNTesterNavigationState> {
 
   componentDidMount() {
     Linking.getInitialURL().then(url => {
-      AsyncStorage.getItem(APP_STATE_KEY, (err, storedString) => {
-        const exampleAction = URIActionMap(
-          this.props.exampleFromAppetizeParams,
-        );
-        const urlAction = URIActionMap(url);
-        const launchAction = exampleAction || urlAction;
-        if (err || !storedString) {
-          const initialAction = launchAction || {type: 'InitialAction'};
-          this.setState(RNTesterNavigationReducer(null, initialAction));
-          return;
-        }
-        const storedState = JSON.parse(storedString);
-        if (launchAction) {
-          this.setState(RNTesterNavigationReducer(storedState, launchAction));
-          return;
-        }
-        this.setState(storedState);
-      });
+      const exampleAction = URIActionMap(this.props.exampleFromAppetizeParams);
+      const urlAction = URIActionMap(url);
+      const launchAction = exampleAction || urlAction;
+      const initialAction = launchAction || {type: 'InitialAction'};
+      this.setState(RNTesterNavigationReducer(null, initialAction));
     });
   }
 
@@ -202,9 +186,7 @@ class RNTesterApp extends React.Component<Props, RNTesterNavigationState> {
     this.drawer && this.drawer.closeDrawer();
     const newState = RNTesterNavigationReducer(this.state, action);
     if (this.state !== newState) {
-      this.setState(newState, () =>
-        AsyncStorage.setItem(APP_STATE_KEY, JSON.stringify(this.state)),
-      );
+      this.setState(newState);
       return true;
     }
     return false;

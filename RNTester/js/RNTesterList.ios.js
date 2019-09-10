@@ -202,11 +202,6 @@ const APIExamples: Array<RNTesterExample> = [
     supportsTVOS: true,
   },
   {
-    key: 'AsyncStorageExample',
-    module: require('./AsyncStorageExample'),
-    supportsTVOS: true,
-  },
-  {
     key: 'BorderExample',
     module: require('./BorderExample'),
     supportsTVOS: true,

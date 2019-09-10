@@ -13,7 +13,6 @@
 const React = require('react');
 const {
   AppRegistry,
-  AsyncStorage,
   BackHandler,
   Button,
   Linking,
@@ -43,8 +42,6 @@ YellowBox.ignoreWarnings([
   'Module RCTImagePickerManager requires main queue setup',
 ]);
 
-const APP_STATE_KEY = 'RNTesterAppState.v2';
-
 const Header = ({onBack, title}: {onBack?: () => mixed, title: string}) => (
   <SafeAreaView style={styles.headerContainer}>
     <View style={styles.header}>
@@ -70,18 +67,14 @@ class RNTesterApp extends React.Component<Props, RNTesterNavigationState> {
   componentDidMount() {
     this._mounted = true;
     Linking.getInitialURL().then(url => {
-      AsyncStorage.getItem(APP_STATE_KEY, (err, storedString) => {
-        if (!this._mounted) {
-          return;
-        }
-        const exampleAction = URIActionMap(
-          this.props.exampleFromAppetizeParams,
-        );
-        const urlAction = URIActionMap(url);
-        const launchAction = exampleAction || urlAction;
-        const initialAction = launchAction || {type: 'InitialAction'};
-        this.setState(RNTesterNavigationReducer(undefined, initialAction));
-      });
+      if (!this._mounted) {
+        return;
+      }
+      const exampleAction = URIActionMap(this.props.exampleFromAppetizeParams);
+      const urlAction = URIActionMap(url);
+      const launchAction = exampleAction || urlAction;
+      const initialAction = launchAction || {type: 'InitialAction'};
+      this.setState(RNTesterNavigationReducer(undefined, initialAction));
     });
 
     Linking.addEventListener('url', url => {
@@ -103,9 +96,7 @@ class RNTesterApp extends React.Component<Props, RNTesterNavigationState> {
     }
     const newState = RNTesterNavigationReducer(this.state, action);
     if (this.state !== newState) {
-      this.setState(newState, () =>
-        AsyncStorage.setItem(APP_STATE_KEY, JSON.stringify(this.state)),
-      );
+      this.setState(newState);
     }
   };
 

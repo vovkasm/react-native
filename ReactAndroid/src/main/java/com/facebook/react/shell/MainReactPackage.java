@@ -33,7 +33,6 @@ import com.facebook.react.modules.network.NetworkingModule;
 import com.facebook.react.modules.permissions.PermissionsModule;
 import com.facebook.react.modules.share.ShareModule;
 import com.facebook.react.modules.statusbar.StatusBarModule;
-import com.facebook.react.modules.storage.AsyncStorageModule;
 import com.facebook.react.modules.timepicker.TimePickerDialogModule;
 import com.facebook.react.modules.toast.ToastModule;
 import com.facebook.react.modules.vibration.VibrationModule;
@@ -74,7 +73,6 @@ import javax.inject.Provider;
   AppStateModule.class,
   BlobModule.class,
   FileReaderModule.class,
-  AsyncStorageModule.class,
   CameraRollManager.class,
   ClipboardModule.class,
   DatePickerDialogModule.class,
@@ -144,14 +142,6 @@ public class MainReactPackage extends LazyReactPackage {
               @Override
               public NativeModule get() {
                 return new FileReaderModule(context);
-              }
-            }),
-        ModuleSpec.nativeModuleSpec(
-            AsyncStorageModule.class,
-            new Provider<NativeModule>() {
-              @Override
-              public NativeModule get() {
-                return new AsyncStorageModule(context);
               }
             }),
         ModuleSpec.nativeModuleSpec(

@@ -5,34 +5,29 @@
  * LICENSE file in the root directory of this source tree.
  *
  * @format
- * @flow strict-local
+ * @flow
  */
 
 'use strict';
 
 const React = require('react');
 const {StyleSheet, Switch, Text, View} = require('react-native');
-const RNTesterStatePersister = require('./RNTesterStatePersister');
 
 class RNTesterSettingSwitchRow extends React.Component<
-  $FlowFixMeProps,
-  $FlowFixMeState,
+  {label: string},
+  {value: boolean},
 > {
-  UNSAFE_componentWillReceiveProps(newProps) {
-    const {onEnable, onDisable, persister} = this.props;
-    if (newProps.persister.state !== persister.state) {
-      newProps.persister.state ? onEnable() : onDisable();
-    }
-  }
   render() {
-    const {label, persister} = this.props;
+    const {label} = this.props;
     return (
       <View style={styles.row}>
         <Text>{label}</Text>
         <Switch
-          value={persister.state}
+          value={this.state.value}
           onValueChange={value => {
-            persister.setState(() => value);
+            this.setState(() => {
+              value;
+            });
           }}
         />
       </View>
@@ -46,14 +41,5 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
-/* $FlowFixMe(>=0.85.0 site=react_native_fb) This comment suppresses an error
- * found when Flow v0.85 was deployed. To see the error, delete this comment
- * and run Flow. */
-RNTesterSettingSwitchRow = RNTesterStatePersister.createContainer(
-  RNTesterSettingSwitchRow,
-  {
-    cacheKeySuffix: ({label}) => 'Switch:' + label,
-    getInitialState: ({initialValue}) => initialValue,
-  },
-);
+
 module.exports = RNTesterSettingSwitchRow;
