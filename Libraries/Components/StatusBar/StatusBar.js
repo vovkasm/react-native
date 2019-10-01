@@ -192,15 +192,15 @@ function createStackEntry(props: any): any {
  * `StatusBar.popStackEntry` when completed.
  *
  * ```
- * const openThirdPartyBugReporter = async () => {
+ * const openThirdPartyBugReporter = () => {
  *   // The bug reporter has a dark background, so we push a new status bar style.
  *   const stackEntry = StatusBar.pushStackEntry({barStyle: 'light-content'});
  *
  *   // `open` returns a promise that resolves when the UI is dismissed.
- *   await BugReporter.open();
- *
- *   // Don't forget to call `popStackEntry` when you're done.
- *   StatusBar.popStackEntry(stackEntry);
+ *   BugReporter.open().finally(() => {
+ *     // Don't forget to call `popStackEntry` when you're done.
+ *     StatusBar.popStackEntry(stackEntry);
+ *   })
  * };
  * ```
  *

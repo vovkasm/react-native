@@ -23,7 +23,7 @@ function isSourcedFromDisk(sourcePath: string): boolean {
   return !/^http/.test(sourcePath) && /[\\/]/.test(sourcePath);
 }
 
-async function symbolicateStackTrace(
+function symbolicateStackTrace(
   stack: Array<StackFrame>,
 ): Promise<Array<StackFrame>> {
   // RN currently lazy loads whatwg-fetch using a custom fetch module, which,
@@ -43,7 +43,7 @@ async function symbolicateStackTrace(
 
   const devServer = getDevServer();
   if (!devServer.bundleLoadedFromServer) {
-    throw new Error('Bundle was not loaded from the packager');
+    return Promise.reject(new Error('Bundle was not loaded from the packager'));
   }
 
   let stackCopy = stack;
@@ -65,12 +65,12 @@ async function symbolicateStackTrace(
     });
   }
 
-  const response = await fetch(devServer.url + 'symbolicate', {
+  return fetch(devServer.url + 'symbolicate', {
     method: 'POST',
     body: JSON.stringify({stack: stackCopy}),
-  });
-  const json = await response.json();
-  return json.stack;
+  })
+    .then(response => response.json())
+    .then(json => json.stack);
 }
 
 module.exports = symbolicateStackTrace;

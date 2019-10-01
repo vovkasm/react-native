@@ -13,8 +13,10 @@
 import type {Options, DatePickerOpenAction} from './DatePickerAndroidTypes';
 
 class DatePickerAndroid {
-  static async open(options: ?Options): Promise<DatePickerOpenAction> {
-    throw new Error('DatePickerAndroid is not supported on this platform.');
+  static open(options: ?Options): Promise<DatePickerOpenAction> {
+    return Promise.reject(
+      new Error('DatePickerAndroid is not supported on this platform.'),
+    );
   }
 
   /**

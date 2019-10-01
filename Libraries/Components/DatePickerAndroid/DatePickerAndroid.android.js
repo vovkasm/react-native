@@ -31,18 +31,17 @@ function _toMillis(options: Options, key: string) {
  * ### Example
  *
  * ```
- * try {
- *   const {action, year, month, day} = await DatePickerAndroid.open({
+ * DatePickerAndroid.open({
  *     // Use `new Date()` for current date.
  *     // May 25 2020. Month 0 is January.
  *     date: new Date(2020, 4, 25)
- *   });
+ * }).then(({action, year, month, day}) => {
  *   if (action !== DatePickerAndroid.dismissedAction) {
  *     // Selected year, month (0-11), day
  *   }
- * } catch ({code, message}) {
- *   console.warn('Cannot open date picker', message);
- * }
+ * }).catch((e) => {
+ *   console.warn('Cannot open date picker', e.message);
+ * })
  * ```
  */
 class DatePickerAndroid {
@@ -67,7 +66,7 @@ class DatePickerAndroid {
    * Note the native date picker dialog has some UI glitches on Android 4 and lower
    * when using the `minDate` and `maxDate` options.
    */
-  static async open(options: ?Options): Promise<DatePickerOpenAction> {
+  static open(options: ?Options): Promise<DatePickerOpenAction> {
     const optionsMs = options;
     if (optionsMs != null) {
       _toMillis(optionsMs, 'date');

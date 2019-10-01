@@ -64,10 +64,10 @@ function prefetch(url: string) {
   return ImageViewManager.prefetchImage(url);
 }
 
-async function queryCache(
+function queryCache(
   urls: Array<string>,
 ): Promise<{[string]: 'memory' | 'disk' | 'disk/memory'}> {
-  return await ImageViewManager.queryCache(urls);
+  return ImageViewManager.queryCache(urls);
 }
 
 declare class ImageComponentType extends ReactNative.NativeComponent<ImagePropsType> {

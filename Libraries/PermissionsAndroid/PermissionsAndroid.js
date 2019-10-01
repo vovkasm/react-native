@@ -108,15 +108,16 @@ class PermissionsAndroid {
    *
    * @deprecated
    */
-  async requestPermission(
+  requestPermission(
     permission: string,
     rationale?: Rationale,
   ): Promise<boolean> {
     console.warn(
       '"PermissionsAndroid.requestPermission" is deprecated. Use "PermissionsAndroid.request" instead',
     );
-    const response = await this.request(permission, rationale);
-    return response === this.RESULTS.GRANTED;
+    return this.request(permission, rationale).then(
+      response => response === this.RESULTS.GRANTED,
+    );
   }
 
   /**
@@ -125,27 +126,29 @@ class PermissionsAndroid {
    *
    * See https://facebook.github.io/react-native/docs/permissionsandroid.html#request
    */
-  async request(
+  request(
     permission: string,
     rationale?: Rationale,
   ): Promise<PermissionStatus> {
     if (rationale) {
-      const shouldShowRationale = await NativeModules.PermissionsAndroid.shouldShowRequestPermissionRationale(
+      return NativeModules.PermissionsAndroid.shouldShowRequestPermissionRationale(
         permission,
-      );
-
-      if (shouldShowRationale) {
-        return new Promise((resolve, reject) => {
-          NativeModules.DialogManagerAndroid.showAlert(
-            rationale,
-            () => reject(new Error('Error showing rationale')),
-            () =>
-              resolve(
-                NativeModules.PermissionsAndroid.requestPermission(permission),
-              ),
-          );
+      )
+        .then(shouldShowRationale => {
+          if (shouldShowRationale) {
+            return new Promise((resolve, reject) => {
+              NativeModules.DialogManagerAndroid.showAlert(
+                rationale,
+                () => reject(new Error('Error showing rationale')),
+                () => resolve(),
+              );
+            });
+          }
+          return Promise.resolve();
+        })
+        .then(() => {
+          return NativeModules.PermissionsAndroid.requestPermission(permission);
         });
-      }
     }
     return NativeModules.PermissionsAndroid.requestPermission(permission);
   }

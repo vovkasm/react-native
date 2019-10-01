@@ -16,7 +16,7 @@ import type {
 } from './TimePickerAndroidTypes';
 
 const TimePickerAndroid = {
-  async open(options: TimePickerOptions): Promise<TimePickerResult> {
+  open(options: TimePickerOptions): Promise<TimePickerResult> {
     return Promise.reject({
       message: 'TimePickerAndroid is not supported on this platform.',
     });

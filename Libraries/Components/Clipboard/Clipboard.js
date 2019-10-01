@@ -17,24 +17,14 @@ const Clipboard = require('../../BatchedBridge/NativeModules').Clipboard;
  */
 module.exports = {
   /**
-   * Get content of string type, this method returns a `Promise`, so you can use following code to get clipboard content
-   * ```javascript
-   * async _getContent() {
-   *   var content = await Clipboard.getString();
-   * }
-   * ```
+   * Get content of string type, this method returns a `Promise`
    */
   getString(): Promise<string> {
     return Clipboard.getString();
   },
   /**
-   * Set content of string type. You can use following code to set clipboard content
-   * ```javascript
-   * _setContent() {
-   *   Clipboard.setString('hello world');
-   * }
-   * ```
-   * @param the content to be stored in the clipboard.
+   * Set content of string type.
+   * @param content the content to be stored in the clipboard.
    */
   setString(content: string) {
     Clipboard.setString(content);

@@ -24,18 +24,17 @@ import type {
  * ### Example
  *
  * ```
- * try {
- *   const {action, hour, minute} = await TimePickerAndroid.open({
+ * TimePickerAndroid.open({
  *     hour: 14,
  *     minute: 0,
  *     is24Hour: false, // Will display '2 PM'
- *   });
+ * }).then(({action, hour, minute}) => {
  *   if (action !== TimePickerAndroid.dismissedAction) {
  *     // Selected hour (0-23), minute (0-59)
  *   }
- * } catch ({code, message}) {
- *   console.warn('Cannot open time picker', message);
- * }
+ * }).catch((e) => {
+ *   console.warn('Cannot open time picker', e.message);
+ * })
  * ```
  */
 class TimePickerAndroid {
@@ -58,7 +57,7 @@ class TimePickerAndroid {
    * still be resolved with action being `TimePickerAndroid.dismissedAction` and all the other keys
    * being undefined. **Always** check whether the `action` before reading the values.
    */
-  static async open(options: TimePickerOptions): Promise<TimePickerResult> {
+  static open(options: TimePickerOptions): Promise<TimePickerResult> {
     return TimePickerModule.open(options);
   }
 
